@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-const { BrowserWindow } = require('electron')
+const { app, BrowserWindow } = require('electron')
 const { setupTray } = require('../app/app.tray.js')
 const { setupGlobalShortcuts } = require('../app/shortcuts.service.ts')
 const { getAppConfig } = require('../app/AppConfig.ts')
@@ -56,7 +56,7 @@ function createTalkWindow() {
 		}),
 		name: 'talk-primary',
 		windowStatePersistence: true,
-		show: false,
+		show: true,
 	})
 
 	// TODO: return it on release

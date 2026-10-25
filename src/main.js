@@ -364,8 +364,8 @@ app.whenReady().then(async () => {
 		setupReleaseNotificationScheduler(24 * 60)
 	}
 
-	// Open in the background if it is explicitly set, or the app was open at login on macOS
-	const openInBackground = argv.background || app.getLoginItemSettings().wasOpenedAtLogin
+	// Open in the background ONLY if it is explicitly passed as a CLI flag (e.g. from autostart --background)
+	const openInBackground = process.argv.includes('--background')
 
 	try {
 		await installVueDevtools()
@@ -406,34 +406,14 @@ app.whenReady().then(async () => {
 
 		// Show the window in case it is hidden in the system tray and focus it
 		mainWindow.show()
+		mainWindow.focus()
 	}
 
 	/**
-	 * Instead of creating a new app instance - focus existence one
+	 * Instead of creating a new app instance - focus existing one and bring to front
 	 */
-	app.on('second-instance', (event, argv, cwd) => {
-		if (isSameExecution(argv[0], cwd)) {
-			focusMainWindow()
-			return
-		}
-
-		// The second instance is another installation
-		// Open the new instance and close the current one
-		app.releaseSingleInstanceLock()
-		try {
-			const newInstance = spawn(path.resolve(argv[0]), argv.slice(1), {
-				cwd,
-				detached: true,
-				stdio: 'ignore',
-			}).on('spawn', () => {
-				newInstance.unref()
-				app.quit()
-			}).on('error', (error) => {
-				console.error('Failed to switch to the second instance', error)
-			})
-		} catch (error) {
-			console.error('Failed to switch to the second instance', error)
-		}
+	app.on('second-instance', () => {
+		focusMainWindow()
 	})
 
 	// Allow requests to a server with accepted untrusted certificate
@@ -474,13 +454,16 @@ app.whenReady().then(async () => {
 			createMainWindow = createAuthenticationWindow
 		}
 
+		mainWindow.show()
+		mainWindow.focus()
+		try { welcomeWindow.close() } catch (e) {}
+
 		onReadyToShow(mainWindow, () => {
-			// Do not show the main window if it is the Talk Window opened in the background
-			const isTalkWindow = createMainWindow === createTalkWindow
-			if (!isTalkWindow || !openInBackground) {
+			if (!openInBackground) {
 				mainWindow.show()
+				mainWindow.focus()
 			}
-			welcomeWindow.close()
+			try { welcomeWindow.close() } catch (e) {}
 		})
 	})
 
