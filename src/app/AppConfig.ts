@@ -170,6 +170,10 @@ export type AppConfig = {
 	 * Floating Picture-in-Picture window during active calls
 	 */
 	enablePip: boolean
+	/**
+	 * Audible chimes on microphone mute and unmute
+	 */
+	enableAudioCues: boolean
 }
 
 export type AppConfigKey = keyof AppConfig
@@ -199,6 +203,7 @@ const defaultAppConfig: AppConfig = {
 	pttShortcut: 'Control+Shift+M',
 	enableRnnoise: true,
 	enablePip: true,
+	enableAudioCues: true,
 }
 
 /**

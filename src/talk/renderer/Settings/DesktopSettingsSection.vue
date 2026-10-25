@@ -76,6 +76,7 @@ const pttMode = useAppConfigValue('pttMode')
 const pttShortcut = useAppConfigValue('pttShortcut')
 const enableRnnoise = useAppConfigValue('enableRnnoise')
 const enablePip = useAppConfigValue('enablePip')
+const enableAudioCues = useAppConfigValue('enableAudioCues')
 </script>
 
 <template>
@@ -157,8 +158,12 @@ const enablePip = useAppConfigValue('enablePip')
 					{{ t('talk_desktop', 'Real-time neural network noise removal (keyboard clatter, fans, background noise)') }}
 				</div>
 				<NcFormBoxSwitch v-model="enablePip" :label="t('talk_desktop', 'Picture-in-Picture Mini-Player during calls')" />
-				<div style="font-size: 12px; opacity: 0.7; margin-top: -6px;">
+				<div style="font-size: 12px; opacity: 0.7; margin-top: -6px; margin-bottom: 8px;">
 					{{ t('talk_desktop', 'Keep call video and quick mute controls floating when Talk is minimized') }}
+				</div>
+				<NcFormBoxSwitch v-model="enableAudioCues" :label="t('talk_desktop', 'Microphone Mute/Unmute Audio Chimes')" />
+				<div style="font-size: 12px; opacity: 0.7; margin-top: -6px;">
+					{{ t('talk_desktop', 'Pleasant audio chimes confirming microphone mute and unmute') }}
 				</div>
 			</NcFormBox>
 		</NcFormGroup>

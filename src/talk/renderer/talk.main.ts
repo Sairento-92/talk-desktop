@@ -9,6 +9,11 @@ import { createTalkDesktopApp } from './TalkDesktop.app.ts'
 import { setupCodeEnhancer } from './utils/codeEnhancer.ts'
 import { initNoiseSuppression } from './utils/noiseSuppression.ts'
 import { setupPipManager } from './utils/pipManager.ts'
+import { setupAudioCuesListener } from './utils/audioCues.ts'
+import { setupCommandPalette } from './utils/commandPalette.ts'
+import { setupMeetingSummary } from './utils/meetingSummary.ts'
+import { setupChatPolls } from './utils/chatPolls.ts'
+import { setupClipRecorder } from './utils/clipRecorder.ts'
 
 import '../../shared/assets/styles.css'
 import '@talk/src/icons.css'
@@ -20,6 +25,11 @@ setupScreenCaptureProtection()
 setupCodeEnhancer()
 initNoiseSuppression()
 setupPipManager()
+setupAudioCuesListener()
+setupCommandPalette()
+setupMeetingSummary()
+setupChatPolls()
+setupClipRecorder()
 
 await createTalkDesktopApp()
 
