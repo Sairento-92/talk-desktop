@@ -240,6 +240,25 @@ function applyHeaderHeight() {
 }
 
 /**
+ * Apply custom CSS from fixed app data locations
+ */
+async function applyCustomCss() {
+	try {
+		const css = await window.TALK_DESKTOP.getCustomCss()
+		if (!css) {
+			return
+		}
+
+		const style = document.createElement('style')
+		style.id = 'talk-desktop-custom-css'
+		style.textContent = css
+		document.head.appendChild(style)
+	} catch (err) {
+		console.warn('[CustomCSS] Error loading custom CSS:', err)
+	}
+}
+
+/**
  * Handle download links
  */
 function applyDownloadLinkHandler() {
@@ -268,6 +287,7 @@ export async function setupWebPage() {
 	initGlobals()
 	applyUserData()
 	applyHeaderHeight()
+	await applyCustomCss()
 	applyAxiosInterceptors()
 	applyDownloadLinkHandler()
 

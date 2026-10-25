@@ -6,8 +6,10 @@
 const { app, BrowserWindow, ipcMain, desktopCapturer, systemPreferences, shell, session } = require('electron')
 const { default: mri } = require('mri')
 const { spawn } = require('node:child_process')
+const { readFile } = require('node:fs/promises')
 const path = require('node:path')
 const { setupMenu } = require('./app/app.menu.js')
+const { updateTrayBadge } = require('./app/app.tray.js')
 const { loadAppConfig, getAppConfig, setAppConfig } = require('./app/AppConfig.ts')
 const { appData } = require('./app/AppData.js')
 const { registerAppProtocolHandler } = require('./app/appProtocol.ts')
@@ -31,6 +33,23 @@ const { BUILD_CONFIG } = require('./shared/build.config.ts')
 const { createTalkWindow } = require('./talk/talk.window.js')
 const { createUpgradeWindow } = require('./upgrade/upgrade.window.ts')
 const { createWelcomeWindow } = require('./welcome/welcome.window.ts')
+
+// Fix Issue #2002: Windows AudioServiceSandbox regression causing NotReadableError
+app.commandLine.appendSwitch('disable-features', 'AudioServiceSandbox')
+app.commandLine.appendSwitch('enable-features', 'WebRtcAllowInputVolumeAdjustment')
+
+// Fix Issue #1971: Prevent modal crash popups during network drops or waking from sleep
+process.on('uncaughtException', (error) => {
+	if (error?.code === 'ENOTFOUND' || error?.code === 'ECONNRESET' || error?.code === 'EAI_AGAIN' || error?.message?.includes('net::ERR_')) {
+		console.warn('[Network Offline]', error.message)
+		return
+	}
+	console.error('[Uncaught Exception]', error)
+})
+
+process.on('unhandledRejection', (reason) => {
+	console.warn('[Unhandled Rejection]', reason)
+})
 
 const argv = mri(process.argv.slice(app.isPackaged ? 1 : 2))
 
@@ -76,10 +95,21 @@ ipcMain.handle('app:getSystemL10n', () => ({
 }))
 ipcMain.handle('app:enableWebRequestInterceptor', (event, ...args) => enableWebRequestInterceptor(...args))
 ipcMain.handle('app:disableWebRequestInterceptor', (event, ...args) => disableWebRequestInterceptor(...args))
-ipcMain.handle('app:setBadgeCount', async (event, count) => app.setBadgeCount(count))
+ipcMain.handle('app:setBadgeCount', async (event, count) => {
+	app.setBadgeCount(count)
+	await updateTrayBadge(count)
+})
 ipcMain.on('app:relaunch', () => relaunchApp())
 ipcMain.handle('app:config:get', (event, key) => getAppConfig(key))
 ipcMain.handle('app:config:set', (event, key, value) => setAppConfig(key, value))
+ipcMain.handle('app:custom-css:get', async () => {
+	const files = [
+		...(isWindows && process.env.ProgramData ? [path.join(process.env.ProgramData, app.getName(), 'custom.css')] : []),
+		path.join(app.getPath('userData'), 'custom.css'),
+	]
+	const styles = await Promise.all(files.map((file) => readFile(file, 'utf-8').catch(() => '')))
+	return styles.filter(Boolean).join('\n\n')
+})
 ipcMain.on('app:grantUserGesturedPermission', (event, id) => {
 	return event.sender.executeJavaScript(`document.getElementById('${id}')?.click()`, true)
 })
@@ -126,6 +156,13 @@ ipcMain.handle('app:getDesktopCapturerSources', async () => {
 let isInWindowRelaunch = false
 
 app.whenReady().then(async () => {
+	// Auto-grant media and notification permissions
+	session.defaultSession.setPermissionRequestHandler((webContents, permission, callback) => {
+		const allowed = ['media', 'audioCapture', 'videoCapture', 'notifications', 'screen'].includes(permission)
+		callback(allowed)
+	})
+	session.defaultSession.setPermissionCheckHandler(() => true)
+
 	await loadAppConfig()
 	await runMigrations()
 
@@ -296,10 +333,11 @@ app.whenReady().then(async () => {
 	})
 
 	ipcMain.handle('authentication:logout', async () => {
-		if (createMainWindow === createTalkWindow) {
+		if (createMainWindow === createTalkWindow || createMainWindow === createWelcomeWindow) {
 			appData.reset()
 			await mainWindow.webContents.session.clearStorageData()
 			app.setBadgeCount(0)
+			await updateTrayBadge(0)
 			const authenticationWindow = createAuthenticationWindow()
 			createMainWindow = createAuthenticationWindow
 			onReadyToShow(authenticationWindow, () => authenticationWindow.show())

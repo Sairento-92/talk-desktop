@@ -14,6 +14,11 @@ import '@global-styles/dist/icons.css'
 const quitButton = document.querySelector<HTMLButtonElement>('.quit')!
 quitButton.addEventListener('click', () => window.TALK_DESKTOP.quit())
 
+const logoutButton = document.querySelector<HTMLButtonElement>('.logout')
+if (logoutButton) {
+	logoutButton.addEventListener('click', () => window.TALK_DESKTOP.logout())
+}
+
 if (__CHANNEL__ !== 'stable') {
 	document.querySelector<HTMLDivElement>('.footer')!.textContent = __VERSION_TAG__
 }
@@ -31,6 +36,9 @@ initGlobals()
 applyAxiosInterceptors()
 
 if (appData.credentials) {
+	if (logoutButton) {
+		logoutButton.classList.remove('hidden')
+	}
 	await window.TALK_DESKTOP.enableWebRequestInterceptor(appData.serverUrl, { credentials: appData.credentials })
 	await refetchAppDataWithRetry(appData)
 	// Init accounts in case this is the first run with the new config

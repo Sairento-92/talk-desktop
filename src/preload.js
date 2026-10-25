@@ -123,6 +123,12 @@ const TALK_DESKTOP = {
 		return () => ipcRenderer.removeListener('talk:media:action', handler)
 	},
 	/**
+	 * Get custom CSS loaded from fixed app data locations
+	 *
+	 * @return {Promise<string>}
+	 */
+	getCustomCss: () => ipcRenderer.invoke('app:custom-css:get'),
+	/**
 	 * Get an application config value by key
 	 *
 	 * @param {string} [key] - Config key

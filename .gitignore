@@ -33,6 +33,7 @@ node_modules/
 
 # Electron-Forge
 out/
+dist-ci/
 
 # IDE
 .vscode/
