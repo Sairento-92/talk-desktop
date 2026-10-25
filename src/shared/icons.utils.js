@@ -53,6 +53,15 @@ function getTrayIcon() {
 }
 
 /**
+ * Get absolute path to the tray icon for the current platform and theme
+ *
+ * @return {string} Absolute path to the tray icon
+ */
+function getTrayIconPath() {
+	return path.resolve(__dirname, getTrayIcon())
+}
+
+/**
  * Get BrowserWindow icon for the current platform
  *
  * @return {string|undefined} Path to the icon or undefined if not required on the current platform
@@ -68,5 +77,6 @@ function getBrowserWindowIcon() {
 
 module.exports = {
 	getTrayIcon,
+	getTrayIconPath,
 	getBrowserWindowIcon,
 }

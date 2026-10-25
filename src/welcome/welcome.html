@@ -31,6 +31,25 @@
 		display: none;
 	}
 
+	.logout {
+		-webkit-app-region: no-drag;
+		position: fixed;
+		inset-block-start: 4px;
+		inset-inline-end: 48px;
+		width: 44px;
+		height: 44px;
+		border: none;
+		background: transparent var(--original-icon-logout-white) no-repeat center;
+		background-size: 20px;
+		cursor: pointer;
+		border-radius: 8px;
+		transition: background-color 0.2s;
+	}
+
+	.logout:hover {
+		background-color: rgba(0, 0, 0, 0.2);
+	}
+
 	.quit {
 		-webkit-app-region: no-drag;
 		position: fixed;
@@ -133,6 +152,7 @@
 		<div class="spacer"></div>
 		<div class="footer"></div>
 	</div>
+	<button class="logout hidden" aria-label="Log out" title="Log out" type="button"></button>
 	<button class="quit hidden" aria-label="Quit" type="button"></button>
 </body>
 </html>
