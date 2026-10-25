@@ -15,13 +15,22 @@ Wszystkie skompilowane paczki instalacyjne dla najnowszego wydania **v2.4.1** s�
 
 | System operacyjny | Typ paczki | Link do pobrania |
 | :--- | :--- | :--- |
-| **🪟 Windows (10/11 x64)** | Samodzielny ZIP (Portable / Installer) | [Nextcloud-Talk-Windows-x64.zip](https://github.com/Sairento-92/talk-desktop/releases/latest/download/Nextcloud-Talk-Windows-x64.zip) |
+| **🪟 Windows (10/11 x64)** | **Natywny Instalator (Zalecany)** | [Nextcloud-Talk-Setup-v2.4.1.exe](https://github.com/Sairento-92/talk-desktop/releases/latest/download/Nextcloud-Talk-Setup-v2.4.1.exe) |
+| **🪟 Windows (10/11 x64)** | Samodzielny ZIP (Portable) | [Nextcloud-Talk-Windows-x64.zip](https://github.com/Sairento-92/talk-desktop/releases/latest/download/Nextcloud-Talk-Windows-x64.zip) |
 | **🍎 macOS (Intel & Apple Silicon)** | Aplikacja macOS x64/Rosetta | [Nextcloud-Talk-macOS-x64.zip](https://github.com/Sairento-92/talk-desktop/releases/latest/download/Nextcloud-Talk-macOS-x64.zip) |
 | **🐧 Linux (x86_64)** | Archiwum tar.gz | [Nextcloud-Talk-Linux-x64.tar.gz](https://github.com/Sairento-92/talk-desktop/releases/latest/download/Nextcloud-Talk-Linux-x64.tar.gz) |
 
 ---
 
 ## 🌟 Nowe Funkcje i Ulepszenia w tym Forku
+
+### 🤖 Audio AI & Picture-in-Picture
+- **Redukcja szumów w czasie rzeczywistym AI (RNNoise WASM / WebAudio)**:
+  - Zaawansowany filtr neuronowy Mozilla/Xiph RNNoise eliminujący dźwięki uderzeń w klawiaturę, szum wentylatorów chłodzenia PC i hałas z otoczenia w czasie rzeczywistym.
+  - Szybki przełącznik on/off w sekcji *Ulepszenia Audio & Video* w ustawieniach aplikacji.
+- **Pływające okno Picture-in-Picture (PiP / Mini-Player)**:
+  - Zawsze na wierzchu (Always-on-Top) miniaturowy odtwarzacz wideo podczas minimalizacji Talka.
+  - Płynny obraz aktywnego mówcy w 60 fps, licznik czasu połączenia oraz szybkie przyciski wyciszenia mikrofonu 🎙️, kamery 📹, przywrócenia okna 🗖 i zakończenia rozmowy ❌.
 
 ### 🔔 Powiadomienia, Tacka i Interfejs
 - **Licznik nieprzeczytanych wiadomości w zasobniku (PR #1605)**:
