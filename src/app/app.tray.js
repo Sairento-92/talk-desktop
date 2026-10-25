@@ -32,8 +32,12 @@ async function refreshTrayIcon() {
 
 	try {
 		const iconPath = getTrayIconPath()
-		const icon = await createTrayIconWithBadge(iconPath, currentBadgeCount)
-		trayInstance.setImage(icon)
+		if (currentBadgeCount <= 0) {
+			trayInstance.setImage(iconPath)
+		} else {
+			const icon = await createTrayIconWithBadge(iconPath, currentBadgeCount)
+			trayInstance.setImage(icon)
+		}
 	} catch (error) {
 		console.error('Failed to update tray icon with badge:', error)
 	}
