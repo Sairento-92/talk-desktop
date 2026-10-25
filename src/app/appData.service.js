@@ -19,7 +19,10 @@ export async function refetchAppData(appData, persist = false) {
 		getCurrentUserData(appData.serverUrl),
 		getCapabilities(appData.serverUrl),
 	])
-	const talkCapabilities = capabilitiesResponse.capabilities.spreed
+	const talkCapabilities = capabilitiesResponse.capabilities?.spreed
+	if (!talkCapabilities) {
+		throw new Error(`Server ${appData.serverUrl} does not have Talk (spreed) enabled in capabilities`)
+	}
 	appData.talkHash = null
 	appData.talkHashDirty = false
 	appData.userMetadata = userMetadata
@@ -58,7 +61,8 @@ export async function refetchAppDataWithRetry(appData) {
 				}
 				// Network error, maintenance, service unavailable etc.
 				// Let's try again later
-				console.debug(`Cannot get AppData... Error: ${error.code}. Response status: ${error.response?.status || 'unknown'}`)
+				const errDetail = error.message || error.code || 'unknown error'
+				console.warn(`[AppData] Cannot get AppData... Error: ${errDetail}. Response status: ${error.response?.status || 'unknown'}`)
 				return false
 			}
 		}

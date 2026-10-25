@@ -24,6 +24,9 @@ export async function getCapabilities(serverUrl) {
 			'OCS-APIRequest': 'true',
 		},
 	})
+	if (!response?.data?.ocs?.data?.capabilities) {
+		throw new Error(`Invalid capabilities response from ${serverUrl}: server returned empty or non-OCS payload`)
+	}
 	return response.data.ocs.data
 }
 
@@ -35,6 +38,13 @@ export async function getCapabilities(serverUrl) {
  * @return {Promise<import('axios').AxiosResponse>}
  */
 export async function getCurrentUserData(serverUrl) {
-	const response = await axios.get(generateOcsUrl('cloud/user', {}, { baseURL: serverUrl }))
+	const response = await axios.get(generateOcsUrl('cloud/user', {}, { baseURL: serverUrl }), {
+		headers: {
+			'OCS-APIRequest': 'true',
+		},
+	})
+	if (!response?.data?.ocs?.data) {
+		throw new Error(`Invalid user response from ${serverUrl}: server returned empty or non-OCS payload`)
+	}
 	return response.data.ocs.data
 }

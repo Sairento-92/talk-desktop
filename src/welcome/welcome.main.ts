@@ -39,8 +39,24 @@ if (appData.credentials) {
 	if (logoutButton) {
 		logoutButton.classList.remove('hidden')
 	}
+
+	const statusEl = document.querySelector<HTMLDivElement>('.status-message')
+	const slowTimer = setTimeout(() => {
+		if (statusEl) {
+			statusEl.textContent = `Łączenie z ${appData.serverUrl}...`
+			statusEl.classList.remove('hidden')
+		}
+	}, 2500)
+
 	await window.TALK_DESKTOP.enableWebRequestInterceptor(appData.serverUrl, { credentials: appData.credentials })
-	await refetchAppDataWithRetry(appData)
+	try {
+		await refetchAppDataWithRetry(appData)
+	} finally {
+		clearTimeout(slowTimer)
+		if (statusEl) {
+			statusEl.classList.add('hidden')
+		}
+	}
 	// Init accounts in case this is the first run with the new config
 	// TODO: replace with a proper migration when the migration system supports it
 	await initAppConfig()
