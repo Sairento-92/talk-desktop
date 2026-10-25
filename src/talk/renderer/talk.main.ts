@@ -7,6 +7,8 @@ import { setupWebPage } from '../../shared/setupWebPage.js'
 import { setupScreenCaptureProtection } from './screensharing/screenCaptureProtection.ts'
 import { createTalkDesktopApp } from './TalkDesktop.app.ts'
 import { setupCodeEnhancer } from './utils/codeEnhancer.ts'
+import { initNoiseSuppression } from './utils/noiseSuppression.ts'
+import { setupPipManager } from './utils/pipManager.ts'
 
 import '../../shared/assets/styles.css'
 import '@talk/src/icons.css'
@@ -16,6 +18,8 @@ await setupWebPage()
 
 setupScreenCaptureProtection()
 setupCodeEnhancer()
+initNoiseSuppression()
+setupPipManager()
 
 await createTalkDesktopApp()
 

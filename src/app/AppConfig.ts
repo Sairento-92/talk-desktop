@@ -162,6 +162,14 @@ export type AppConfig = {
 	 * Global shortcut key combination
 	 */
 	pttShortcut: string
+	/**
+	 * Real-time AI background noise suppression (RNNoise)
+	 */
+	enableRnnoise: boolean
+	/**
+	 * Floating Picture-in-Picture window during active calls
+	 */
+	enablePip: boolean
 }
 
 export type AppConfigKey = keyof AppConfig
@@ -189,6 +197,8 @@ const defaultAppConfig: AppConfig = {
 	pttEnabled: true,
 	pttMode: 'toggle',
 	pttShortcut: 'Control+Shift+M',
+	enableRnnoise: true,
+	enablePip: true,
 }
 
 /**

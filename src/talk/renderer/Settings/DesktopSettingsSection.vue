@@ -74,6 +74,8 @@ onMounted(async () => {
 const pttEnabled = useAppConfigValue('pttEnabled')
 const pttMode = useAppConfigValue('pttMode')
 const pttShortcut = useAppConfigValue('pttShortcut')
+const enableRnnoise = useAppConfigValue('enableRnnoise')
+const enablePip = useAppConfigValue('enablePip')
 </script>
 
 <template>
@@ -145,6 +147,19 @@ const pttShortcut = useAppConfigValue('pttShortcut')
 						{ label: t('talk_desktop', 'Toggle Mute (press to toggle)'), value: 'toggle' },
 						{ label: t('talk_desktop', 'Push-to-Talk (hold to talk)'), value: 'push' }
 					]" />
+			</NcFormBox>
+		</NcFormGroup>
+
+		<NcFormGroup :label="t('talk_desktop', 'Audio & Video Enhancements')">
+			<NcFormBox>
+				<NcFormBoxSwitch v-model="enableRnnoise" :label="t('talk_desktop', 'AI Noise Suppression (RNNoise)')" />
+				<div style="font-size: 12px; opacity: 0.7; margin-top: -6px; margin-bottom: 8px;">
+					{{ t('talk_desktop', 'Real-time neural network noise removal (keyboard clatter, fans, background noise)') }}
+				</div>
+				<NcFormBoxSwitch v-model="enablePip" :label="t('talk_desktop', 'Picture-in-Picture Mini-Player during calls')" />
+				<div style="font-size: 12px; opacity: 0.7; margin-top: -6px;">
+					{{ t('talk_desktop', 'Keep call video and quick mute controls floating when Talk is minimized') }}
+				</div>
 			</NcFormBox>
 		</NcFormGroup>
 
