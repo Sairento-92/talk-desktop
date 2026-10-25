@@ -34,6 +34,10 @@ const { isDevMode } = useDevMode()
 					{{ applicationName }}
 				</div>
 
+				<div class="title-bar__fork-badge">
+					Fork by Sairento
+				</div>
+
 				<div v-if="channel !== 'stable'" class="title-bar__channel">
 					{{ channel }}
 				</div>
@@ -94,6 +98,20 @@ const { isDevMode } = useDevMode()
 	&:focus-visible::after {
 		bottom: 0;
 	}
+}
+
+.title-bar__fork-badge {
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+	color: #ffffff;
+	background: rgba(0, 130, 201, 0.45);
+	border: 1px solid rgba(255, 255, 255, 0.35);
+	padding: 2px 9px;
+	border-radius: 12px;
+	margin-inline-end: calc(var(--default-grid-baseline) * 2);
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .title-bar__channel {
