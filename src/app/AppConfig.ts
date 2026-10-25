@@ -150,6 +150,18 @@ export type AppConfig = {
 	 * List of trusted certificate fingerprints on Linux
 	 */
 	trustedFingerprints: string[]
+	/**
+	 * Global shortcut / Push-to-talk enabled
+	 */
+	pttEnabled: boolean
+	/**
+	 * Global shortcut mode: 'toggle' for mute toggle, 'push' for push-to-talk
+	 */
+	pttMode: 'toggle' | 'push'
+	/**
+	 * Global shortcut key combination
+	 */
+	pttShortcut: string
 }
 
 export type AppConfigKey = keyof AppConfig
@@ -174,6 +186,9 @@ const defaultAppConfig: AppConfig = {
 	secondarySpeaker: false,
 	secondarySpeakerDevice: null,
 	trustedFingerprints: [],
+	pttEnabled: true,
+	pttMode: 'toggle',
+	pttShortcut: 'Control+Shift+M',
 }
 
 /**

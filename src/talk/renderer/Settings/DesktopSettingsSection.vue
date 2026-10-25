@@ -62,6 +62,10 @@ const notificationLevelOptions = [
 
 const secondarySpeaker = useAppConfigValue('secondarySpeaker')
 const secondarySpeakerDevice = useAppConfigValue('secondarySpeakerDevice')
+
+const pttEnabled = useAppConfigValue('pttEnabled')
+const pttMode = useAppConfigValue('pttMode')
+const pttShortcut = useAppConfigValue('pttShortcut')
 </script>
 
 <template>
@@ -116,6 +120,20 @@ const secondarySpeakerDevice = useAppConfigValue('secondarySpeakerDevice')
 		</NcFormGroup>
 
 		<UiFormGroupZoom v-model="zoomFactor" />
+
+		<NcFormGroup :label="t('talk_desktop', 'Global Shortcuts & Microphone')">
+			<NcFormBox>
+				<NcFormBoxSwitch v-model="pttEnabled" :label="t('talk_desktop', 'Enable global microphone shortcut (Ctrl+Shift+M / CapsLock)')" />
+				<UiFormBoxSelectNative
+					v-if="pttEnabled"
+					v-model="pttMode"
+					:label="t('talk_desktop', 'Mode')"
+					:options="[
+						{ label: t('talk_desktop', 'Toggle Mute (press to toggle)'), value: 'toggle' },
+						{ label: t('talk_desktop', 'Push-to-Talk (hold to talk)'), value: 'push' }
+					]" />
+			</NcFormBox>
+		</NcFormGroup>
 
 		<NcFormGroup :label="t('talk_desktop', 'Notifications & Sounds')">
 			<NcFormBox>

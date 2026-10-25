@@ -5,6 +5,7 @@
 
 const { BrowserWindow } = require('electron')
 const { setupTray } = require('../app/app.tray.js')
+const { setupGlobalShortcuts } = require('../app/shortcuts.service.ts')
 const { getAppConfig } = require('../app/AppConfig.ts')
 const { applyContextMenu } = require('../app/applyContextMenu.js')
 const { applyDownloadHandler } = require('../app/downloads.ts')
@@ -81,6 +82,7 @@ function createTalkWindow() {
 	applyZoom(window)
 
 	setupTray(window)
+	setupGlobalShortcuts(window)
 
 	window.loadURL(getWindowUrl('talk') + '#/apps/spreed')
 
