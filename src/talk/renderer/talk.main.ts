@@ -4,13 +4,18 @@
  */
 
 import { setupWebPage } from '../../shared/setupWebPage.js'
+import { setupScreenCaptureProtection } from './screensharing/screenCaptureProtection.ts'
 import { createTalkDesktopApp } from './TalkDesktop.app.ts'
+import { setupCodeEnhancer } from './utils/codeEnhancer.ts'
 
 import '../../shared/assets/styles.css'
 import '@talk/src/icons.css'
 import './talk.styles.css'
 
 await setupWebPage()
+
+setupScreenCaptureProtection()
+setupCodeEnhancer()
 
 await createTalkDesktopApp()
 

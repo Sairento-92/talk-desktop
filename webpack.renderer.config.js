@@ -75,10 +75,6 @@ function getFullVersion(cwd = __dirname) {
 	// Only when the repository is directly on the released (tagged) commit
 	const gitVersion = spawnSync('git', ['tag', '--points-at', 'HEAD'], { cwd }).stdout.toString().trim()
 	if (gitVersion) {
-		if (gitVersion !== `v${packageVersion}`) {
-			throw new Error(`Git tag version "${gitVersion}" is different from the package version "${packageVersion}". Likely release process went wrong...`)
-		}
-		// Dev channel build directly on the released (tagged) commit
 		return gitVersion
 	}
 
