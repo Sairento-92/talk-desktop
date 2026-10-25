@@ -1,197 +1,95 @@
-<!--
-  - SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
-  - SPDX-License-Identifier: CC0-1.0
--->
+# Nextcloud Talk Desktop (Community Edition by Sairento)
 
-# Nextcloud Talk Desktop
+[![GitHub Release](https://img.shields.io/github/v/release/Sairento-92/talk-desktop?color=0082c9&label=Wydanie)](https://github.com/Sairento-92/talk-desktop/releases/latest)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/Sairento-92/talk-desktop/build.yml?branch=main&label=Build%20CI)](https://github.com/Sairento-92/talk-desktop/actions)
+[![Platform: Windows | macOS | Linux](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-brightgreen)](https://github.com/Sairento-92/talk-desktop/releases/latest)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](LICENSE.txt)
 
-[![REUSE status](https://api.reuse.software/badge/github.com/nextcloud/talk-desktop)](https://api.reuse.software/info/github.com/nextcloud/talk-desktop)
-[![GitHub Release Stable](https://img.shields.io/github/v/release/nextcloud-releases/talk-desktop?sort=semver&display_name=tag&style=flat)](https://github.com/nextcloud-releases/talk-desktop/releases/latest)
-[![GitHub Release Beta](https://img.shields.io/github/v/release/nextcloud-releases/talk-desktop?include_prereleases&sort=semver&display_name=tag&style=flat)](https://github.com/nextcloud-releases/talk-desktop/releases/)
-![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/nextcloud-releases/talk-desktop/total?style=flat)
+> **Oficjalny, rozszerzony fork klienta Nextcloud Talk Desktop by Sairento** (`cloud.huriko.com`). Zawiera ponad 20 najważniejszych i najbardziej wyczekiwanych ulepszeń, pull requestów oraz poprawek błędów z oficjalnego repozytorium Nextcloud, które nie doczekały się jeszcze wydania w wersji upstream.
 
-> Use [Nextcloud Talk](https://github.com/nextcloud/spreed/) on your desktop without opening a web browser
+---
 
-![Nextcloud Talk](./Nextcloud-Talk-light.png#gh-light-mode-only)
-![Nextcloud Talk](./Nextcloud-Talk-dark.png#gh-dark-mode-only)
+## 📥 Pobierz Gotowe Wydanie (Multi-platform)
 
-## 📥 Install
+Wszystkie skompilowane paczki instalacyjne dla najnowszego wydania **v2.4.1** są dostępne w zakładce [GitHub Releases](https://github.com/Sairento-92/talk-desktop/releases/latest):
 
-All binaries and `beta` releases are available on [Nextcloud Releases](https://github.com/nextcloud-releases/talk-desktop/releases).
+| System operacyjny | Typ paczki | Link do pobrania |
+| :--- | :--- | :--- |
+| **🪟 Windows (10/11 x64)** | Samodzielny ZIP (Portable / Installer) | [Nextcloud-Talk-Windows-x64.zip](https://github.com/Sairento-92/talk-desktop/releases/latest/download/Nextcloud-Talk-Windows-x64.zip) |
+| **🍎 macOS (Intel & Apple Silicon)** | Aplikacja macOS x64/Rosetta | [Nextcloud-Talk-macOS-x64.zip](https://github.com/Sairento-92/talk-desktop/releases/latest/download/Nextcloud-Talk-macOS-x64.zip) |
+| **🐧 Linux (x86_64)** | Archiwum tar.gz | [Nextcloud-Talk-Linux-x64.tar.gz](https://github.com/Sairento-92/talk-desktop/releases/latest/download/Nextcloud-Talk-Linux-x64.tar.gz) |
 
-| Platform (arch)          | Distribution type                                                                                                           | Download link                                                                                                                                        |
-|--------------------------|-----------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **🐧 Linux** (x64)       | [Flatpak](https://flatpak.org) single file (recommended), see note below                                                    | [Nextcloud.Talk-linux-x64.flatpak](https://github.com/nextcloud-releases/talk-desktop/releases/latest/download/Nextcloud.Talk-linux-x64.flatpak)     |
-| **🐧 Linux** (x64)       | ZIP archive                                                                                                                 | [Nextcloud.Talk-linux-x64.zip](https://github.com/nextcloud-releases/talk-desktop/releases/latest/download/Nextcloud.Talk-linux-x64.zip)             |
-| **🍎 macOS** (Universal) | Disc Image                                                                                                                  | [Nextcloud.Talk-macos-universal.dmg](https://github.com/nextcloud-releases/talk-desktop/releases/latest/download/Nextcloud.Talk-macos-universal.dmg) |
-| **🪟 Windows** (x64)     | Non-admin single-user one-click installer (recommended)                                                                     | [Nextcloud.Talk-windows-x64.exe](https://github.com/nextcloud-releases/talk-desktop/releases/latest/download/Nextcloud.Talk-windows-x64.exe)         |
-| **🪟 Windows** (x64)     | [MSI](https://github.com/electron-userland/electron-wix-msi/blob/master/guides/enduser.md) (for administrated environments) | [Nextcloud.Talk-windows-x64.msi](https://github.com/nextcloud-releases/talk-desktop/releases/latest/download/Nextcloud.Talk-windows-x64.msi)         |
+---
 
-Installation of flatpak on Linux: Ensure you have Flatpak installed on your system. Then, use the command `flatpak install <path-to-flatpakref-file>` in the terminal, replacing `<path-to-flatpakref-file>` with the actual path to your Flatpak file.
+## 🌟 Nowe Funkcje i Ulepszenia w tym Forku
 
-### via Package manager
+### 🔔 Powiadomienia, Tacka i Interfejs
+- **Licznik nieprzeczytanych wiadomości w zasobniku (PR #1605)**:
+  - Dynamicznie rysowana czerwona plakietka z cyfrą (1, 2, 5, 99+) na ikonie aplikacji w trayu obok zegara Windows, macOS i Linux.
+- **Szybkie odpowiedzi i przyciski akcji w powiadomieniach (PR #1848)**:
+  - Obsługa przycisków akcji (*Otwórz*, *Oznacz jako przeczytane*) oraz pola szybkiej odpowiedzi inline w natywnych dymkach powiadomień.
+- **Wskaźnik postępu pobierania (Issue #1737)**:
+  - Zielony pasek postępu pobierania plików wyświetlany bezpośrednio na ikonie aplikacji na pasku zadań Windows (`Taskbar progress`).
+- **Menu aplikacji Nextcloud na belce tytułowej (PR #1690)**:
+  - Ikona 9-kropek umożliwia błyskawiczny skok do Plików, Kalendarza, Poczty i Kontaktów bez otwierania przeglądarki.
+- **Spolszczone menu kontekstowe (Issue #1887)**:
+  - Menu prawego przycisku myszy (*Kopiuj, Wklej, Wytnij, Zaznacz wszystko, Sprawdzanie pisowni*) w pełni przetłumaczone na język polski.
+- **Konfiguracja sprawdzania pisowni (PR #855)**:
+  - Słowniki PL, EN, DE z szybkim przełącznikiem sprawdzania w menu kontekstowym.
+- **Niestandardowe style Custom CSS (PR #1745)**:
+  - Wsparcie dla pliku `custom.css` w ustawieniach aplikacji, pozwalające na pełną personalizację wyglądu czatu.
 
-| Platform       | Package manager                                                                       | Command                              | Status                                                                                    |
-|----------------|---------------------------------------------------------------------------------------|--------------------------------------|-------------------------------------------------------------------------------------------|
-| **🪟 Windows** | [Windows Package Manager](https://learn.microsoft.com/en-us/windows/package-manager/) | `winget install Nextcloud.Talk`      | ![WinGet Package Version](https://img.shields.io/winget/v/Nextcloud.Talk?style=flat)      |
-| **🪟 Windows** | [Windows Package Manager](https://learn.microsoft.com/en-us/windows/package-manager/) | `winget install Nextcloud.Talk.Beta` | ![WinGet Package Version](https://img.shields.io/winget/v/Nextcloud.Talk.Beta?style=flat) |                                                                                     |
+### 🛡️ Bezpieczeństwo, Połączenia i Udostępnianie Ekranu
+- **Eliminacja efektu lustra przy udostępnianiu (PR #1826)**:
+  - Natywne wykluczanie okna Talk z nagrywania całego pulpitu (`BrowserWindow.setContentProtection(true)` / Windows `WDA_EXCLUDEFROMCAPTURE`), zapobiegające nieskończonej pętli odbić w transmitowanym obrazie.
+- **Żółta ramka DWM transmitowanego okna/ekranu (PR #1974)**:
+  - Włączenie flag Chromium WebRTC oznaczających udostępniany monitor wyraźną żółtą ramką Windows DWM.
+- **Strażnik zamykania aktywnej rozmowy (Issue #2003)**:
+  - Ostrzeżenie z pytaniem czy opuścić rozmowę, czy kontynuować w tle przy kliknięciu [X] w trakcie trwającego połączenia.
+- **Automatyczny status „W trakcie rozmowy” (Issue #1768)**:
+  - Automatyczna zmiana statusu użytkownika na `Zajęty / W trakcie rozmowy` podczas aktywnego połączenia i przywracanie stanu po rozłączeniu.
+- **Poprawka błędu audio NotReadableError na Windows (Issue #2002)**:
+  - Wyłączenie flagi `AudioServiceSandbox`, eliminujące błąd zacinania mikrofonu w Windows 10/11.
+- **Optymalizacja 4K / HiDPI / RDP (Issue #1787)**:
+  - Włączona sprzętowa akceleracja rasteryzacji GPU (`--enable-gpu-rasterization`, `--enable-zero-copy`).
+- **Zabezpieczenie przed zamrażaniem powiadomień po zerwaniu sieci (PR #1975)**:
+  - Eliminacja błędu statusu 500 wydłużającego interwał sprawdzania wiadomości aż do 2,5 godziny po zmianie Wi-Fi.
+- **Przycisk wylogowania na ekranie powitalnym (PR #1012)**:
+  - Przycisk `Log out` na ekranie startowym ułatwiający zmianę konta w razie problemów z siecią.
+- **Akcja „Dołącz przez link” (PR #1541)**:
+  - Opcja wklejenia linku do pokoju rozmowy z poziomu menu głównego aplikacji.
 
-#### Community supported packages
+### 🔄 Dedykowany Auto-Updater
+Klient posiada wbudowaną obsługę automatycznych aktualizacji połączoną bezpośrednio z repozytorium wydań:
+`https://api.github.com/repos/Sairento-92/talk-desktop/releases`
 
-| Platform       | Package manager                                           | Command                        | Status                                                                                       |
-|----------------|-----------------------------------------------------------|--------------------------------|----------------------------------------------------------------------------------------------|
-| **🍎 macOS** | [Homebrew](https://formulae.brew.sh/cask/nextcloud-talk#default) | `brew install --cask nextcloud-talk` | ![Homebrew Package](https://img.shields.io/homebrew/cask/v/nextcloud-talk?style=flat) | 
-| **🪟 Windows** | [Chocolatey Community](https://community.chocolatey.org/) | `choco install nextcloud-talk` | ![Chocolatey Package Version](https://img.shields.io/chocolatey/v/nextcloud-talk?style=flat) |
+---
 
-## 🏗️ Prerequisites
+## 🛠️ Budowanie ze Źródeł (Development)
 
-- [Nextcloud Server](https://github.com/nextcloud/server) version 27 or higher.
-- [Nextcloud Talk](https://github.com/nextcloud/spreed) version 17 or higher.
-
-## 👥 Multi-account
-
-Full multi-account currently [is not currently supported](https://github.com/nextcloud/talk-desktop/issues/7).
-
-However, using portable `zip` distribution, you can have several Nextcloud Talk instances run simultaneously. Just rename the executable from default  `Nextcloud Talk` to a custom name. For example: 
-
-```
-/path/to/apps/
-├── home-apps/
-│   └── Nextcloud Talk/
-│       ├── ...
-│       ├── Nextcloud Talk (Home).exe
-│       └── ...
-└── work-apps/
-    └── Nextcloud Talk/
-        ├── ...
-        ├── Nextcloud Talk (Work).exe
-        └── ...
-```
-
-## ⌨️ CLI usage
-
-### Application flags
-
-Adjust how the application runs when launching.
-
-| Flag           | Description                                                                   |
-|----------------|-------------------------------------------------------------------------------|
-| `--background` | Start minimized to the system tray without a window (used for run at startup) |
-
-### CLI commands
-
-Run a command in the app and quit without launching the entire app.
-
-#### `config`
-
-Set application configuration.
-
-| Option                     | Description                                |
-|----------------------------|--------------------------------------------|
-| `--accounts=[user@]server` | Comma-separated list of prefilled accounts |
-
-Examples:
-
-```sh
-./Nextcloud\ Talk config --accounts=cloud.company.tld
-./Nextcloud\ Talk config --accounts='Name Surname@cloud.company.tld'
-./Nextcloud\ Talk config --accounts=name@email.tld@company.tld/nextcloud
-```
-
-## 🛠️ Development Setup
-
-Install dependencies:
-```bash
-npm ci 
-```
-
-### Advanced setup
-
-By default, Talk Desktop bundles a specific Talk frontend installed as an npm dependency.
-To develop with a different version, an unreleased branch or local version, clone it to `./spreed`:
-
-```sh
-# Clone to ./spreed
-git clone https://github.com/nextcloud/spreed
-
-# And install dependencies in spreed as well
-npm --prefix=spreed ci
-```
-
-To use local Talk from a different path, for example, a local Nextcloud server setup, set `TALK_PATH` ENV variable or edit `.env` file:
-
-```sh
-TALK_PATH=/path/to/nextcloud/server/apps-extra/spreed/
-```
-
-## 🧑‍💻 Development
-
-### Start development server in Electron
+Wymagania: Node.js 20+ lub 24+, npm.
 
 ```bash
+# Instalacja zależności
+npm ci
+
+# Uruchomienie w trybie deweloperskim
 npm run dev
+
+# Sprawdzenie typów TypeScript
+npm run ts:check
+
+# Kompilacja paczek produkcyjnych
+npm run build          # Bieżąca platforma
+npm run build:windows  # Windows x64
+npm run build:linux    # Linux x64
+npm run build:mac      # macOS Universal
 ```
 
-### Build binaries for production
+---
 
-```bash
-# 🖥️ Current platform and architecture
-npm run build
-
-# 🐧 Linux (x64)
-npm run build:linux
-
-# 🍏 macOS (universal)
-npm run build:mac
-# 🍏 macOS (separate x64 and arm64)
-npm run build:mac:x64
-npm run build:mac:arm64
-
-# 🪟 Windows (win32-x64)
-npm run build:windows
-```
-
-Notes:
-- **General recommendation is to always build binaries on the same platform**
-- Building Windows binaries on Linux/Mac requires Wine
-- Building Mac binaries on Windows is not supported
-- Building Linux binaries on Windows is not supported for some Linux distributions
-
-### Maintenance
-
-#### Generating icons
-
-After changing source icons, to generate icons in different sizes and formats, run:
-
-```bash
-npm run generate-icons
-```
-
-#### Updating global (server) styles
-
-Talk frontend depends on the global Nextcloud server styles. To manually get them run:
-
-```bah
-# node ./scripts/fetch-server-styles.mjs <VERSION>, for example
-node ./scripts/fetch-server-styles.mjs stable29
-```
-
-## 📦 Packaging distributions
-
-```bash
-# 🐧 Linux (x64)
-npm run package:linux
-
-# 🍏 macOS (universal)
-npm run package:mac
-# 🍏 macOS (separate x64 and arm64)
-npm run package:mac:arm64
-npm run package:mac:x64
-
-# 🪟 Windows (win32-x64)
-npm run package:windows
-```
-
-## 👥 Contribution Guidelines
-
-See: https://github.com/nextcloud/spreed#contribution-guidelines
+## 👤 Autor i Społeczność
+- **Autor forka:** Sairento ([@Sairento-92](https://github.com/Sairento-92))
+- **Email:** `jakubbojarski92@gmail.com`
+- **Studio:** Huriko Cloud (`cloud.huriko.com`)
+- **Licencja:** AGPL-3.0
