@@ -115,6 +115,25 @@ const TALK_DESKTOP = {
 	 */
 	activateWindowForCapture: (source) => ipcRenderer.invoke('app:activateWindowForCapture', source),
 	/**
+	 * PR #1848: Show native notification with actions and reply
+	 */
+	showNotification: (options) => ipcRenderer.send('app:showNotification', options),
+	onNotificationClicked: (callback) => {
+		const handler = (_event, data) => callback(data)
+		ipcRenderer.on('notification:clicked', handler)
+		return () => ipcRenderer.removeListener('notification:clicked', handler)
+	},
+	onNotificationMarkAsRead: (callback) => {
+		const handler = (_event, data) => callback(data)
+		ipcRenderer.on('notification:markAsRead', handler)
+		return () => ipcRenderer.removeListener('notification:markAsRead', handler)
+	},
+	onNotificationReplied: (callback) => {
+		const handler = (_event, data) => callback(data)
+		ipcRenderer.on('notification:replied', handler)
+		return () => ipcRenderer.removeListener('notification:replied', handler)
+	},
+	/**
 	 * Relaunch an entire application
 	 */
 	relaunch: () => ipcRenderer.send('app:relaunch'),

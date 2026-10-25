@@ -74,7 +74,24 @@ export function applyDownloadHandler(browserWindow: BrowserWindow) {
 			})
 		}
 
+		// Issue #1737: Update window taskbar progress bar during download
+		item.on('updated', (_event, state) => {
+			if (state === 'interrupted') {
+				browserWindow.setProgressBar(-1)
+			} else if (state === 'progressing') {
+				if (item.isPaused()) {
+					browserWindow.setProgressBar(2) // paused state
+				} else if (item.getTotalBytes() > 0) {
+					const ratio = item.getReceivedBytes() / item.getTotalBytes()
+					browserWindow.setProgressBar(Math.min(Math.max(ratio, 0), 1))
+				} else {
+					browserWindow.setProgressBar(2) // indeterminate
+				}
+			}
+		})
+
 		item.once('done', (event, state) => {
+			browserWindow.setProgressBar(-1)
 			const pathToFile = item.getSavePath()
 			const { base, dir } = path.parse(pathToFile)
 			let notification: Notification | undefined

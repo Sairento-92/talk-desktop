@@ -7,9 +7,12 @@
 import { translate as t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { computed, ref } from 'vue'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActionLink from '@nextcloud/vue/components/NcActionLink'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import IconOpenInNew from 'vue-material-design-icons/OpenInNew.vue'
+import IconRotateLeft from 'vue-material-design-icons/RotateLeft.vue'
+import IconRotateRight from 'vue-material-design-icons/RotateRight.vue'
 
 /**
  * Noop
@@ -25,6 +28,7 @@ async function noopLoadMore() {
 
 const isOpen = ref(false)
 const isLoadingMore = ref(false)
+const rotation = ref(0)
 
 // List of variables to sync with upstream openViewer call
 const onClose = ref(noop)
@@ -33,6 +37,7 @@ const list = ref([])
 const loadMore = ref(noopLoadMore)
 const hasMore = ref(false)
 
+const isImage = computed(() => file.value?.mime?.startsWith('image/'))
 const viewComponent = computed(() => file.value && window.OCA.Viewer.availableHandlers.find((handler) => handler.mimes.includes(file.value.mime))?.component)
 
 const link = computed(() => file.value && generateUrl(`/f/${file.value.fileid}`))
@@ -40,6 +45,14 @@ const link = computed(() => file.value && generateUrl(`/f/${file.value.fileid}`)
 const currentIndex = computed(() => list.value.findIndex((item) => item.fileid === file.value?.fileid))
 const hasPrevious = computed(() => currentIndex.value > 0)
 const hasNext = computed(() => currentIndex.value !== -1 && (currentIndex.value < list.value.length - 1 || hasMore.value))
+
+function rotateLeft() {
+	rotation.value = (rotation.value - 90) % 360
+}
+
+function rotateRight() {
+	rotation.value = (rotation.value + 90) % 360
+}
 
 /**
  * Open the viewer modal
@@ -51,6 +64,7 @@ const hasNext = computed(() => currentIndex.value !== -1 && (currentIndex.value 
  * @param {() => void} options.onClose - Callback called then the modal is closed
  */
 function open(options = {}) {
+	rotation.value = 0
 	onClose.value = options.onClose ?? noop
 	file.value = options.fileInfo ?? null
 	list.value = options.list?.length ? options.list : (file.value ? [file.value] : [])
@@ -63,6 +77,7 @@ function open(options = {}) {
  * Close the viewer modal
  */
 function close() {
+	rotation.value = 0
 	file.value = null
 	list.value = []
 	loadMore.value = noopLoadMore
@@ -75,6 +90,7 @@ function close() {
  * Show the previous file in the list
  */
 function showPrevious() {
+	rotation.value = 0
 	if (hasPrevious.value) {
 		file.value = list.value[currentIndex.value - 1]
 	}
@@ -84,6 +100,7 @@ function showPrevious() {
  * Show the next file in the list, fetching more files first if needed
  */
 async function showNext() {
+	rotation.value = 0
 	if (currentIndex.value === list.value.length - 1 && hasMore.value && !isLoadingMore.value) {
 		isLoadingMore.value = true
 		try {
@@ -120,6 +137,7 @@ defineExpose({
 		v-model:show="isOpen"
 		class="viewer-modal"
 		:class="{ 'viewer-modal--open': isOpen }"
+		:style="{ '--viewer-image-rotation': `${rotation}deg` }"
 		:name="file.basename"
 		size="full"
 		closeButtonOutside
@@ -135,6 +153,18 @@ defineExpose({
 			:file="file" />
 
 		<template #actions>
+			<NcActionButton v-if="isImage" @click="rotateLeft">
+				<template #icon>
+					<IconRotateLeft :size="20" />
+				</template>
+				{{ t('talk_desktop', 'Rotate left') }}
+			</NcActionButton>
+			<NcActionButton v-if="isImage" @click="rotateRight">
+				<template #icon>
+					<IconRotateRight :size="20" />
+				</template>
+				{{ t('talk_desktop', 'Rotate right') }}
+			</NcActionButton>
 			<NcActionLink :href="link">
 				<template #icon>
 					<IconOpenInNew :size="20" />

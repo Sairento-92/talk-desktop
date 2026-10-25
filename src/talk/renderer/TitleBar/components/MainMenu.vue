@@ -9,6 +9,7 @@ import type { ReleaseInfo } from '../../../../app/githubRelease.service.ts'
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import { spawnDialog } from '@nextcloud/vue/functions/dialog'
 import { inject, onBeforeMount, onBeforeUnmount, ref } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActionLink from '@nextcloud/vue/components/NcActionLink'
@@ -18,9 +19,11 @@ import IconBugOutline from 'vue-material-design-icons/BugOutline.vue'
 import IconCloudDownloadOutline from 'vue-material-design-icons/CloudDownloadOutline.vue'
 import IconCogOutline from 'vue-material-design-icons/CogOutline.vue'
 import IconInformationOutline from 'vue-material-design-icons/InformationOutline.vue'
+import IconLink from 'vue-material-design-icons/Link.vue'
 import IconMenu from 'vue-material-design-icons/Menu.vue'
 import IconReload from 'vue-material-design-icons/Reload.vue'
 import IconWeb from 'vue-material-design-icons/Web.vue'
+import OpenConversationLinkDialog from './OpenConversationLinkDialog.vue'
 import UiDotBadge from './UiDotBadge.vue'
 import { BUILD_CONFIG } from '../../../../shared/build.config.ts'
 import { getCurrentTalkRoutePath } from '../../TalkWrapper/talk.service.ts'
@@ -33,6 +36,7 @@ const showHelp = () => window.TALK_DESKTOP.showHelp()
 const reload = () => window.location.reload()
 const openSettings = () => window.OCA.Talk.Settings.open()
 const openInWeb = () => window.open(generateUrl(getCurrentTalkRoutePath()), '_blank')
+const joinByLink = () => spawnDialog(OpenConversationLinkDialog)
 
 const newRelease = ref<ReleaseInfo | null>(null)
 onBeforeMount(async () => {
@@ -87,6 +91,12 @@ onBeforeUnmount(() => {
 					<IconWeb :size="20" />
 				</template>
 				{{ t('talk_desktop', 'Open in web browser') }}
+			</NcActionButton>
+			<NcActionButton closeAfterClick @click="joinByLink">
+				<template #icon>
+					<IconLink :size="20" />
+				</template>
+				{{ t('talk_desktop', 'Join by link') }}
 			</NcActionButton>
 
 			<NcActionSeparator />

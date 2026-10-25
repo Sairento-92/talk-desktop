@@ -81,6 +81,15 @@ function createTalkWindow() {
 	applyWheelZoom(window)
 	applyZoom(window)
 
+	// PR #855: Configure multilingual spell checker languages
+	try {
+		const locale = app.getLocale() || 'en-US'
+		const languages = Array.from(new Set([locale, 'pl', 'en-US', 'de']))
+		window.webContents.session.setSpellCheckerLanguages(languages)
+	} catch (e) {
+		console.warn('Failed to configure spellchecker languages', e)
+	}
+
 	setupTray(window)
 	setupGlobalShortcuts(window)
 

@@ -9,6 +9,7 @@ const { isExternalUrl } = require('./utils.ts')
 const translations = {
 	pl: {
 		addToDictionary: 'Dodaj do słownika',
+		spellCheck: 'Sprawdzanie pisowni',
 		copyImage: 'Kopiuj obraz',
 		saveImage: 'Zapisz obraz jako...',
 		copyLinkAddress: 'Kopiuj adres linku',
@@ -22,6 +23,7 @@ const translations = {
 	},
 	de: {
 		addToDictionary: 'Zum Wörterbuch hinzufügen',
+		spellCheck: 'Rechtschreibprüfung',
 		copyImage: 'Bild kopieren',
 		saveImage: 'Bild speichern als...',
 		copyLinkAddress: 'Link-Adresse kopieren',
@@ -35,6 +37,7 @@ const translations = {
 	},
 	fr: {
 		addToDictionary: 'Ajouter au dictionnaire',
+		spellCheck: 'Vérification orthographique',
 		copyImage: 'Copier l\'image',
 		saveImage: 'Enregistrer l\'image sous...',
 		copyLinkAddress: 'Copier l\'adresse du lien',
@@ -48,6 +51,7 @@ const translations = {
 	},
 	es: {
 		addToDictionary: 'Añadir al diccionario',
+		spellCheck: 'Corrector ortográfico',
 		copyImage: 'Copiar imagen',
 		saveImage: 'Guardar imagen como...',
 		copyLinkAddress: 'Copiar dirección del enlace',
@@ -61,6 +65,7 @@ const translations = {
 	},
 	en: {
 		addToDictionary: 'Add to dictionary',
+		spellCheck: 'Spell check',
 		copyImage: 'Copy image',
 		saveImage: 'Save image as...',
 		copyLinkAddress: 'Copy link address',
@@ -173,6 +178,17 @@ export function applyContextMenu(browserWindow) {
 		]
 		if (params.isEditable || params.selectionText.length) {
 			menuItems.push(...menuClipboardItems)
+		}
+
+		// PR #855: Quick toggle for spell checking in text fields
+		if (params.isEditable) {
+			menuItems.push({
+				label: t.spellCheck,
+				type: 'checkbox',
+				checked: browserWindow.webContents.session.isSpellCheckerEnabled(),
+				click: (item) => browserWindow.webContents.session.setSpellCheckerEnabled(item.checked),
+			})
+			menuItems.push({ type: 'separator' })
 		}
 
 		// DevTools toggle

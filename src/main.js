@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-const { app, BrowserWindow, ipcMain, desktopCapturer, nativeImage, systemPreferences, shell, session } = require('electron')
+const { app, BrowserWindow, ipcMain, desktopCapturer, nativeImage, systemPreferences, shell, session, Notification } = require('electron')
 const { default: mri } = require('mri')
 const { spawn } = require('node:child_process')
 const { readFile } = require('node:fs/promises')
@@ -37,7 +37,12 @@ const { createWelcomeWindow } = require('./welcome/welcome.window.ts')
 
 // Fix Issue #2002: Windows AudioServiceSandbox regression causing NotReadableError
 app.commandLine.appendSwitch('disable-features', 'AudioServiceSandbox')
-app.commandLine.appendSwitch('enable-features', 'WebRtcAllowInputVolumeAdjustment')
+// PR #1974: Enable native Windows.Graphics.Capture border (WebRtcWgcRequireBorder, WindowCaptureBorder)
+app.commandLine.appendSwitch('enable-features', 'WebRtcAllowInputVolumeAdjustment,WebRtcWgcRequireBorder,WindowCaptureBorder')
+// Fix Issue #1787: Boost 4K / HiDPI / RDP rendering performance and eliminate stutter
+app.commandLine.appendSwitch('enable-gpu-rasterization')
+app.commandLine.appendSwitch('enable-zero-copy')
+app.commandLine.appendSwitch('canvas-oop-rasterization')
 
 // Fix Issue #1971: Prevent modal crash popups during network drops or waking from sleep
 process.on('uncaughtException', (error) => {
@@ -119,6 +124,66 @@ ipcMain.handle('app:anything', () => { /* Put any code here to run it from UI */
 ipcMain.on('app:openChromeWebRtcInternals', () => openChromeWebRtcInternals())
 ipcMain.on('app:setScreenCaptureProtection', (event, active) => {
 	BrowserWindow.fromWebContents(event.sender)?.setContentProtection(!!active)
+})
+// PR #1848: Native Toast Notifications with Quick Actions & Inline Reply
+const activeNativeNotifications = new Set()
+ipcMain.on('app:showNotification', (event, { title, body, icon, token, notificationId, actions, hasReply }) => {
+	if (!Notification.isSupported()) return
+
+	const notifOptions = {
+		title: title || 'Nextcloud Talk',
+		body: body || '',
+		silent: true,
+		hasReply: hasReply ?? true,
+		replyPlaceholder: 'Napisz odpowiedź...',
+		actions: actions || [
+			{ type: 'button', text: 'Otwórz' },
+			{ type: 'button', text: 'Oznacz jako przeczytane' },
+		],
+	}
+
+	if (icon && typeof icon === 'string' && icon.startsWith('data:')) {
+		try {
+			notifOptions.icon = nativeImage.createFromDataURL(icon)
+		} catch {}
+	}
+
+	const notif = new Notification(notifOptions)
+	activeNativeNotifications.add(notif)
+
+	notif.on('click', () => {
+		event.sender.send('notification:clicked', { token, notificationId })
+		const win = BrowserWindow.fromWebContents(event.sender)
+		if (win) {
+			if (win.isMinimized()) win.restore()
+			win.show()
+			win.focus()
+		}
+	})
+
+	notif.on('action', (eventAction, index) => {
+		if (index === 0) {
+			event.sender.send('notification:clicked', { token, notificationId })
+			const win = BrowserWindow.fromWebContents(event.sender)
+			if (win) {
+				if (win.isMinimized()) win.restore()
+				win.show()
+				win.focus()
+			}
+		} else if (index === 1) {
+			event.sender.send('notification:markAsRead', { token, notificationId })
+		}
+	})
+
+	notif.on('reply', (eventReply, replyText) => {
+		event.sender.send('notification:replied', { token, notificationId, replyText })
+	})
+
+	notif.on('close', () => {
+		activeNativeNotifications.delete(notif)
+	})
+
+	notif.show()
 })
 ipcMain.handle('app:update:check', async () => await checkForUpdate({ forceRequest: true }))
 /**

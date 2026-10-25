@@ -47,6 +47,7 @@ function handleError(handleLoadEnd) {
 			:key="src"
 			class="viewer-image"
 			:class="mediaClass"
+			:style="{ transform: 'rotate(var(--viewer-image-rotation, 0deg))', transition: 'transform 0.25s ease-in-out' }"
 			:src="src"
 			:alt="file.basename"
 			@load="handleLoadEnd(false)"

@@ -183,27 +183,38 @@ export function createNotificationStore() {
 			}
 			window.TALK_DESKTOP.showCallbox(params)
 		} else {
-			const n = new Notification(notification.subject, {
-				title: notification.subject,
-				lang: appData.userMetadata.locale,
-				body: notification.message,
-				tag: notification.notificationId,
-				// We have a custom sound
-				silent: true,
-			})
-			n.addEventListener('click', () => {
-				const event = {
-					cancelAction: false,
-					notification,
-					action: {
-						url: notification.link,
-						type: 'WEB',
-					},
-				}
-				window.TALK_DESKTOP.focusTalk()
-				// Talk will open the call from notification if necessary
-				emit('notifications:action:execute', event)
-			}, false)
+			if (window.TALK_DESKTOP?.showNotification) {
+				window.TALK_DESKTOP.showNotification({
+					title: notification.subject,
+					body: notification.message,
+					token: notification.objectId,
+					notificationId: notification.notificationId,
+					icon: notification.icon,
+					hasReply: true,
+				})
+			} else {
+				const n = new Notification(notification.subject, {
+					title: notification.subject,
+					lang: appData.userMetadata.locale,
+					body: notification.message,
+					tag: notification.notificationId,
+					// We have a custom sound
+					silent: true,
+				})
+				n.addEventListener('click', () => {
+					const event = {
+						cancelAction: false,
+						notification,
+						action: {
+							url: notification.link,
+							type: 'WEB',
+						},
+					}
+					window.TALK_DESKTOP.focusTalk()
+					// Talk will open the call from notification if necessary
+					emit('notifications:action:execute', event)
+				}, false)
+			}
 		}
 		playSound()
 	}
@@ -406,6 +417,40 @@ export function createNotificationStore() {
 	_watchTabVisibility()
 
 	requestWebNotificationPermissions()
+
+	if (window.TALK_DESKTOP?.onNotificationClicked) {
+		window.TALK_DESKTOP.onNotificationClicked(({ token }) => {
+			if (token) openConversation(token)
+		})
+	}
+	if (window.TALK_DESKTOP?.onNotificationReplied) {
+		window.TALK_DESKTOP.onNotificationReplied(async ({ token, replyText }) => {
+			if (token && replyText) {
+				try {
+					const { default: axios } = await import('@nextcloud/axios')
+					const { generateOcsUrl } = await import('@nextcloud/router')
+					await axios.post(generateOcsUrl('/apps/spreed/api/v1/chat/{token}', { token }), {
+						message: replyText,
+					})
+				} catch (err) {
+					console.error('Failed to send quick reply from notification', err)
+				}
+			}
+		})
+	}
+	if (window.TALK_DESKTOP?.onNotificationMarkAsRead) {
+		window.TALK_DESKTOP.onNotificationMarkAsRead(async ({ notificationId }) => {
+			if (notificationId) {
+				try {
+					const { default: axios } = await import('@nextcloud/axios')
+					const { generateOcsUrl } = await import('@nextcloud/router')
+					await axios.delete(generateOcsUrl('/apps/notifications/api/v2/notifications/{id}', { id: notificationId }))
+				} catch (err) {
+					console.error('Failed to mark notification as read', err)
+				}
+			}
+		})
+	}
 
 	return {
 		state,
