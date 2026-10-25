@@ -14,6 +14,7 @@ import { setupCommandPalette } from './utils/commandPalette.ts'
 import { setupMeetingSummary } from './utils/meetingSummary.ts'
 import { setupChatPolls } from './utils/chatPolls.ts'
 import { setupClipRecorder } from './utils/clipRecorder.ts'
+import { setupOfflineGuard } from './utils/offlineGuard.ts'
 
 import '../../shared/assets/styles.css'
 import '@talk/src/icons.css'
@@ -30,6 +31,7 @@ setupCommandPalette()
 setupMeetingSummary()
 setupChatPolls()
 setupClipRecorder()
+setupOfflineGuard()
 
 await createTalkDesktopApp()
 

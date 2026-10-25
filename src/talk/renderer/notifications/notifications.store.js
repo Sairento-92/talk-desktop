@@ -182,6 +182,9 @@ export function createNotificationStore() {
 			}
 			window.TALK_DESKTOP.showCallbox(params)
 		} else {
+			if (userStatusStore.isDnd) {
+				return
+			}
 			if (window.TALK_DESKTOP?.showNotification) {
 				window.TALK_DESKTOP.showNotification({
 					title: notification.subject,
@@ -215,7 +218,9 @@ export function createNotificationStore() {
 				}, false)
 			}
 		}
-		playSound()
+		if (!userStatusStore.isDnd) {
+			playSound()
+		}
 	}
 
 	/**
