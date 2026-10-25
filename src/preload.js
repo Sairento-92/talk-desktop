@@ -105,6 +105,17 @@ const TALK_DESKTOP = {
 	 */
 	relaunchWindow: () => ipcRenderer.send('app:relaunchWindow'),
 	/**
+	 * Listen for media actions (global shortcut / Push-to-Talk)
+	 *
+	 * @param {(action: 'toggle' | 'mute' | 'unmute') => void} callback
+	 * @return {() => void} Unsubscribe function
+	 */
+	onMediaAction: (callback) => {
+		const handler = (_event, action) => callback(action)
+		ipcRenderer.on('talk:media:action', handler)
+		return () => ipcRenderer.removeListener('talk:media:action', handler)
+	},
+	/**
 	 * Get an application config value by key
 	 *
 	 * @param {string} [key] - Config key
