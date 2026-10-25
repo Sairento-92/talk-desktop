@@ -137,11 +137,43 @@
 		right: 15%;
 		top: -80%;
 	}
+
+	.fork-banner {
+		margin-top: 16px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 8px;
+		z-index: 10;
+	}
+
+	.huriko-logo {
+		height: 36px;
+		width: auto;
+		filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
+	}
+
+	.fork-tag {
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 1.5px;
+		text-transform: uppercase;
+		color: #ffffff;
+		background: rgba(255, 255, 255, 0.18);
+		padding: 4px 14px;
+		border-radius: 14px;
+		border: 1px solid rgba(255, 255, 255, 0.35);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+	}
 	</style>
 </head>
 <body>
 	<div class="wrapper">
 		<img class="logo" src="<%= require('../../img/talk-logo.svg') %>" alt="" />
+		<div class="fork-banner">
+			<img class="huriko-logo" src="<%= require('../../img/huriko-logo.png') %>" alt="Huriko" />
+			<span class="fork-tag">Fork by Sairento</span>
+		</div>
 		<div class="clouds">
 			<div class="cloud" style="--height: 20px; animation: animateCloud 2s linear infinite;"></div>
 			<div class="cloud" style="--height: 16px; animation: animateCloud 1.5s linear infinite; top: 80px; left: 50px"></div>

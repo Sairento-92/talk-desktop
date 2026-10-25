@@ -55,7 +55,8 @@ const WM_GETICON_TIMEOUT_MS = 200
 type NativeBindings = {
 	koffi: typeof Koffi
 	sizeofBITMAP: number
-	EnumWindowsProc: Koffi.IKoffiCType
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	EnumWindowsProc: any
 	EnumWindows: (proc: unknown, lparam: number) => boolean
 	IsWindowVisible: (hwnd: number) => boolean
 	IsIconic: (hwnd: number) => boolean
@@ -302,7 +303,7 @@ export async function listNativeWindows(): Promise<NativeWindowInfo[]> {
 	}
 
 	const windows: NativeWindowInfo[] = []
-	let callback: Koffi.IKoffiRegisteredCallback | undefined
+	let callback: unknown | undefined
 
 	try {
 		callback = native.koffi.register((hwnd: number): boolean => {
@@ -330,14 +331,16 @@ export async function listNativeWindows(): Promise<NativeWindowInfo[]> {
 				// Skip any window that throws — never break the enumeration
 			}
 			return true
-		}, native.koffi.pointer(native.EnumWindowsProc))
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		}, native.koffi.pointer(native.EnumWindowsProc as any))
 
 		native.EnumWindows(callback, 0)
 	} catch (error) {
 		console.error('[nativeWindows] Failed to enumerate windows:', error)
 	} finally {
 		if (callback) {
-			native.koffi.unregister(callback)
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			native.koffi.unregister(callback as any)
 		}
 	}
 

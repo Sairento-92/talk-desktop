@@ -80,7 +80,7 @@ export function applyZoom(window: BrowserWindow) {
  */
 export function buildTitle(title?: string) {
 	const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
-	const BASE_TITLE = BUILD_CONFIG.applicationName
+	const BASE_TITLE = `${BUILD_CONFIG.applicationName} (Fork by Sairento)`
 	const base = __CHANNEL__ !== 'stable' ? `${BASE_TITLE} ${capitalize(__CHANNEL__)}` : BASE_TITLE
 	return title ? `${title} - ${base}` : base
 }
