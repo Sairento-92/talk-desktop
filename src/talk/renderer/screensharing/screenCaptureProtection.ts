@@ -37,7 +37,11 @@ function isScreenCapture(constraints: MediaStreamConstraints): boolean {
 /**
  * While the user shares a whole screen, exclude the Talk window from screen capture
  * (`BrowserWindow.setContentProtection`) so it does not appear inside the shared stream —
- * which would otherwise recurse into an infinite "hall of mirrors".
+ * which would otherwise recurse into an infinite "hall of mirrors". No-op on Linux, where
+ * the platform has no capture-exclusion primitive (there the spreed-side overlay applies).
+ *
+ * Implemented by wrapping getUserMedia so both the start (a screen capture is requested)
+ * and the end (the capture track stops) are observed, without any change to Talk (spreed).
  */
 export function setupScreenCaptureProtection(): void {
 	const mediaDevices = navigator.mediaDevices
@@ -45,6 +49,9 @@ export function setupScreenCaptureProtection(): void {
 		return
 	}
 
+	// Reset to a known baseline: a freshly (re)loaded page has no active screen share, so the
+	// window must be capturable until one starts. This also clears protection that may have been
+	// left enabled if the page was reloaded while sharing.
 	window.TALK_DESKTOP?.setScreenCaptureProtection?.(false)
 
 	const originalGetUserMedia = mediaDevices.getUserMedia.bind(mediaDevices)
@@ -65,6 +72,8 @@ export function setupScreenCaptureProtection(): void {
 			}
 
 			for (const track of stream.getVideoTracks()) {
+				// 'ended' covers the user stopping via the OS/browser picker;
+				// wrapping stop() covers Talk stopping the share programmatically.
 				track.addEventListener('ended', releaseProtection, { once: true })
 				const originalStop = track.stop.bind(track)
 				track.stop = () => {
