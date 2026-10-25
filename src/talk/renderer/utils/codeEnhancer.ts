@@ -240,7 +240,13 @@ export function enhanceCodeBlocks(root: HTMLElement | Document = document) {
 	const codeBlocks = root.querySelectorAll('pre code:not(.talk-highlighted)')
 	codeBlocks.forEach((codeEl) => {
 		const code = codeEl as HTMLElement
+		const preEl = code.parentElement
+		if (code.dataset.talkHighlighted || (preEl && (preEl.querySelector('.talk-code-header-bar') || preEl.dataset.talkCodeEnhanced))) {
+			return
+		}
+		code.dataset.talkHighlighted = 'true'
 		code.classList.add('talk-highlighted')
+		if (preEl) preEl.dataset.talkCodeEnhanced = 'true'
 
 		const rawText = code.textContent || code.innerText || ''
 		if (!rawText.trim()) return
@@ -253,7 +259,6 @@ export function enhanceCodeBlocks(root: HTMLElement | Document = document) {
 		code.className = `hljs language-${highlighted.lang} talk-highlighted`
 
 		// Add header bar with language badge and copy button to parent <pre>
-		const preEl = code.parentElement
 		if (preEl && preEl.tagName === 'PRE' && !preEl.querySelector('.talk-code-header-bar')) {
 			preEl.style.position = 'relative'
 
@@ -324,6 +329,8 @@ function isCodeSnippet(text: string): boolean {
  * Setup smart paste for code blocks
  */
 function setupSmartCodePaste() {
+	if ((window as any).__talk_smart_paste_initialized) return
+	(window as any).__talk_smart_paste_initialized = true
 	document.addEventListener('paste', (e: ClipboardEvent) => {
 		const target = e.target as HTMLElement | null
 		if (!target) return
