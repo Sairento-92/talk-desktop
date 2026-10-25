@@ -4,6 +4,7 @@
   -->
 
 <script setup lang="ts">
+import AppsMenu from './components/AppsMenu.vue'
 import DevMenu from './components/DevMenu.vue'
 import MainMenu from './components/MainMenu.vue'
 import UserMenu from './components/UserMenu.vue'
@@ -49,6 +50,10 @@ const { isDevMode } = useDevMode()
 
 			<div v-if="isDevMode" class="title-bar__item" data-theme-dark>
 				<DevMenu />
+			</div>
+
+			<div class="title-bar__item" data-theme-dark>
+				<AppsMenu />
 			</div>
 
 			<div class="title-bar__item title-bar__main-menu-container" data-theme-dark>
