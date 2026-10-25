@@ -1,0 +1,73 @@
+name: Build All Platforms
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            build_cmd: npm run build:windows:x64
+            out_folder: out/Nextcloud Talk-win32-x64
+            artifact_name: Nextcloud-Talk-Windows-x64.zip
+          - os: ubuntu-latest
+            build_cmd: npm run build:linux
+            out_folder: out/Nextcloud Talk-linux-x64
+            artifact_name: Nextcloud-Talk-Linux-x64.tar.gz
+          - os: macos-latest
+            build_cmd: npm run build:mac:x64
+            out_folder: out/Nextcloud Talk-darwin-x64
+            artifact_name: Nextcloud-Talk-macOS-x64.zip
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install --allow-git=all
+
+      - name: Build package
+        run: ${{ matrix.build_cmd }}
+
+      - name: Compress artifacts (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Compress-Archive -Path "${{ matrix.out_folder }}/*" -DestinationPath "${{ matrix.artifact_name }}" -Force
+
+      - name: Compress artifacts (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          tar -czvf "${{ matrix.artifact_name }}" -C "${{ matrix.out_folder }}" .
+
+      - name: Compress artifacts (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent "${{ matrix.out_folder }}" "${{ matrix.artifact_name }}"
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.artifact_name }}
+
+      - name: Upload to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ matrix.artifact_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
