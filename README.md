@@ -22,9 +22,43 @@ Wszystkie skompilowane paczki instalacyjne dla najnowszego wydania **v2.4.1** s�
 
 ---
 
-## ✨ Nowe Funkcje i Ulepszenia w tym Forku
+## 🔄 Pełne Zestawienie Zmian Względem Oryginalnej Wersji (Upstream Nextcloud)
 
-### 🤖 Audio AI, Picture-in-Picture & Efekty Dźwiękowe
+Poniższa tabela oraz zestawienie szczegółowo prezentują różnice pomiędzy oryginalnym wydaniem Nextcloud Talk Desktop a niniejszym forkiem:
+
+| Obszar / Funkcja | Oryginalny Talk Desktop (Upstream) | Fork Sairento (Community Edition) |
+| :--- | :--- | :--- |
+| **Instalator Windows** | Brak natywnego instalatora `.exe` (tylko zip/msi) | **Dedykowany instalator Inno Setup** z ikonami, autostartem i deinstalatorem |
+| **Uruchamianie okna** | Błąd z ukrywaniem okna (`show: false`, fałszywy autostart) | **Natychmiastowa widoczność okna** i obsługa wyciągania na wierzch (single instance) |
+| **Tłumienie szumów AI** | ❌ Brak (tylko podstawowe AGC/echo z przeglądarki) | **Wbudowana sieć neuronowa RNNoise WASM (48 kHz)** tłumiąca klawiaturę i tło |
+| **Podgląd wideo (PiP)** | ❌ Brak (minimalizacja okna ukrywa wideo) | **Pływające okno Picture-in-Picture** z przyciskami mikrofonu, kamery i rozłączenia |
+| **Paleta komend (`Ctrl+K`)**| ❌ Brak szybkiego przełącznika pokoi | **Błyskawiczna wyszukiwarka pokoi i akcji** pod skrótem `Ctrl + K` |
+| **Dźwięki mikrofonu** | ❌ Brak sygnalizacji wyciszenia | **Syntetyzowane akordy audio (chimes)** przy wyciszaniu i włączaniu mikrofonu |
+| **Podsumowania spotkań** | ❌ Brak | **Komenda `/summary`** generująca agendę i zadania z eksportem do Markdown |
+| **Głosowania i ankiety** | ❌ Brak ankiet na czacie | **Komenda `/poll`** do interaktywnych ankiet z głosowaniem na żywo |
+| **Nagrywarka wycinków** | ❌ Brak rejestratora ekranu | **Komenda `/record`** nagrywająca wybrany fragment ekranu lub rozmowę do WebM/MP4 |
+| **Licznik w zasobniku** | ❌ Brak (zwykła statyczna ikona w trayu) | **Dynamiczna czerwona plakietka z liczbą wiadomości** (PR #1605) |
+| **Powiadomienia OS** | Tylko prosty dymek informacyjny | **Szybkie odpowiedzi inline i przyciski akcji** w dymkach Windows/macOS (PR #1848) |
+| **Udostępnianie ekranu** | Efekt nieskończonego lustra przy transmisji | **Ochrona przed pętlą lustra** (`WDA_EXCLUDEFROMCAPTURE`, PR #1826) |
+| **Ramka udostępniania** | ❌ Brak wizualnego oznaczenia monitora | **Żółta ramka Windows DWM** na nagrywanym monitorze (PR #1974) |
+| **Zamykanie w trakcie rozmowy**| Zamknięcie okna natychmiast rozłączało rozmowę | **Strażnik zamykania (dialog)** pytający czy kontynuować w tle (Issue #2003) |
+| **Status użytkownika** | Ręczna zmiana statusu | **Automatyczne przełączanie na „W trakcie rozmowy”** i powrót (Issue #1768) |
+| **Zamrażanie sieci Wi-Fi** | Zerwanie sieci blokowało powiadomienia do 2,5h | **Auto-reconnect z natychmiastowym odświeżeniem** po uśpieniu/zmianie sieci (PR #1975) |
+| **Język interfejsu** | Angielskie menu kontekstowe, brak słowników | **W pełni spolszczone menu**, słowniki pisowni PL, EN, DE (PR #855, Issue #1887) |
+| **Pasek pobierania** | Brak wskaźnika pobierania | **Zielony pasek postępu pobierania** na ikonie paska zadań (Issue #1737) |
+| **Menu aplikacji Nextcloud**| Brak dostępu do innych aplikacji z poziomu belki | **Ikona 9-kropek na belce tytułowej** (Pliki, Kalendarz, Poczta, Kontakty, PR #1690) |
+| **Własny styl graficzny** | ❌ Brak opcji personalizacji stylów CSS | **Obsługa pliku `custom.css`** do zmiany wyglądu i motywów (PR #1745) |
+| **Obsługa 4K / HiDPI / RDP** | Artefakty i spowolnienia renderowania | **Sprzętowa rasteryzacja GPU** (`--enable-gpu-rasterization`, Issue #1787) |
+| **Obsługa mikrofonu Windows**| Błąd `NotReadableError` blokujący mikrofon | **Wyłączony `AudioServiceSandbox`** eliminujący zawieszanie audio (Issue #2002) |
+| **Ekran logowania** | Brak opcji wylogowania przy błędzie sieci | **Przycisk wylogowania** na ekranie powitalnym (PR #1012) |
+| **Dołączanie do pokoju** | Tylko kliknięcie z czatu | **Akcja „Dołącz przez link”** w menu głównym aplikacji (PR #1541) |
+| **Podgląd zdjęć** | Statyczny podgląd bez rotacji | **Przyciski obracania zdjęć w podglądzie** (Issue #1757) |
+
+---
+
+## ✨ Szczegółowy Opis Wprowadzonych Modułów
+
+### 🤖 1. Audio AI, Picture-in-Picture & Efekty Dźwiękowe
 - **Redukcja szumów w czasie rzeczywistym AI (RNNoise WASM / WebAudio)**:
   - Zaawansowany filtr neuronowy Mozilla/Xiph RNNoise eliminujący dźwięki uderzeń w klawiaturę, szum wentylatorów chłodzenia PC i hałas z otoczenia w czasie rzeczywistym (48 kHz).
   - Przełącznik on/off w sekcji *Ulepszenia Audio & Video* w ustawieniach aplikacji.
@@ -34,7 +68,7 @@ Wszystkie skompilowane paczki instalacyjne dla najnowszego wydania **v2.4.1** s�
 - **Dźwiękowe potwierdzenia mikrofonu (Audio Chimes)**:
   - Dyskretne, syntetyzowane akordy dźwiękowe potwierdzające wyciszenie oraz ponowne włączenie mikrofonu, zapobiegające mówieniu przy wyłączonym mikrofonie.
 
-### ⚡ Narzędzia Produktywności i Nowe Komendy
+### ⚡ 2. Narzędzia Produktywności i Nowe Komendy
 - **Szybki przełącznik / Paleta komend (`Ctrl + K`)**:
   - Błyskawiczna nawigacja po pokojach rozmów i skrótach bez użycia myszki.
 - **Generator podsumowań i notatek ze spotkań (`/summary`)**:
@@ -44,7 +78,7 @@ Wszystkie skompilowane paczki instalacyjne dla najnowszego wydania **v2.4.1** s�
 - **Wbudowany rejestrator klipów ekranu i rozmów (`/record`)**:
   - Jednoklikowe nagrywanie fragmentu ekranu lub rozmowy do pliku WebM/MP4.
 
-### 🔔 Powiadomienia, Tacka i Interfejs
+### 🔔 3. Powiadomienia, Tacka i Interfejs
 - **Licznik nieprzeczytanych wiadomości w zasobniku (PR #1605)**:
   - Dynamicznie rysowana czerwona plakietka z cyfrą (1, 2, 5, 99+) na ikonie aplikacji w trayu obok zegara Windows, macOS i Linux.
 - **Szybkie odpowiedzi i przyciski akcji w powiadomieniach (PR #1848)**:
@@ -60,7 +94,7 @@ Wszystkie skompilowane paczki instalacyjne dla najnowszego wydania **v2.4.1** s�
 - **Niestandardowe style Custom CSS (PR #1745)**:
   - Wsparcie dla pliku `custom.css` w ustawieniach aplikacji, pozwalające na pełną personalizację wyglądu czatu.
 
-### 🔒 Bezpieczeństwo, Połączenia i Udostępnianie Ekranu
+### 🔒 4. Bezpieczeństwo, Połączenia i Udostępnianie Ekranu
 - **Eliminacja efektu lustra przy udostępnianiu (PR #1826)**:
   - Natywne wykluczanie okna Talk z nagrywania całego pulpitu (`BrowserWindow.setContentProtection(true)` / Windows `WDA_EXCLUDEFROMCAPTURE`), zapobiegające nieskończonej pętli odbić w transmitowanym obrazie.
 - **Żółta ramka DWM transmitowanego okna/ekranu (PR #1974)**:
