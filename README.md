@@ -5,11 +5,11 @@
 [![Platform: Windows | macOS | Linux](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-brightgreen)](https://github.com/Sairento-92/talk-desktop/releases/latest)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](LICENSE.txt)
 
-> **Oficjalny, rozszerzony fork klienta Nextcloud Talk Desktop by Sairento** (`cloud.huriko.com`). Zawiera ponad 20 najważniejszych i najbardziej wyczekiwanych ulepszeń, pull requestów oraz poprawek błędów z oficjalnego repozytorium Nextcloud, które nie doczekały się jeszcze wydania w wersji upstream.
+> **Oficjalny, rozszerzony fork klienta Nextcloud Talk Desktop by Sairento** (`cloud.huriko.com`). Zawiera ponad 25 najważniejszych i najbardziej wyczekiwanych ulepszeń, pull requestów oraz poprawek błędów z oficjalnego repozytorium Nextcloud, które nie doczekały się jeszcze wydania w wersji upstream.
 
 ---
 
-## 📥 Pobierz Gotowe Wydanie (Multi-platform)
+## 📦 Pobierz Gotowe Wydanie (Multi-platform)
 
 Wszystkie skompilowane paczki instalacyjne dla najnowszego wydania **v2.4.1** są dostępne w zakładce [GitHub Releases](https://github.com/Sairento-92/talk-desktop/releases/latest):
 
@@ -17,20 +17,32 @@ Wszystkie skompilowane paczki instalacyjne dla najnowszego wydania **v2.4.1** s�
 | :--- | :--- | :--- |
 | **🪟 Windows (10/11 x64)** | **Natywny Instalator (Zalecany)** | [Nextcloud-Talk-Setup-v2.4.1.exe](https://github.com/Sairento-92/talk-desktop/releases/latest/download/Nextcloud-Talk-Setup-v2.4.1.exe) |
 | **🪟 Windows (10/11 x64)** | Samodzielny ZIP (Portable) | [Nextcloud-Talk-Windows-x64.zip](https://github.com/Sairento-92/talk-desktop/releases/latest/download/Nextcloud-Talk-Windows-x64.zip) |
-| **🍎 macOS (Intel & Apple Silicon)** | Aplikacja macOS x64/Rosetta | [Nextcloud-Talk-macOS-x64.zip](https://github.com/Sairento-92/talk-desktop/releases/latest/download/Nextcloud-Talk-macOS-x64.zip) |
+| **🍏 macOS (Intel & Apple Silicon)** | Aplikacja macOS x64/Rosetta | [Nextcloud-Talk-macOS-x64.zip](https://github.com/Sairento-92/talk-desktop/releases/latest/download/Nextcloud-Talk-macOS-x64.zip) |
 | **🐧 Linux (x86_64)** | Archiwum tar.gz | [Nextcloud-Talk-Linux-x64.tar.gz](https://github.com/Sairento-92/talk-desktop/releases/latest/download/Nextcloud-Talk-Linux-x64.tar.gz) |
 
 ---
 
-## 🌟 Nowe Funkcje i Ulepszenia w tym Forku
+## ✨ Nowe Funkcje i Ulepszenia w tym Forku
 
-### 🤖 Audio AI & Picture-in-Picture
+### 🤖 Audio AI, Picture-in-Picture & Efekty Dźwiękowe
 - **Redukcja szumów w czasie rzeczywistym AI (RNNoise WASM / WebAudio)**:
-  - Zaawansowany filtr neuronowy Mozilla/Xiph RNNoise eliminujący dźwięki uderzeń w klawiaturę, szum wentylatorów chłodzenia PC i hałas z otoczenia w czasie rzeczywistym.
-  - Szybki przełącznik on/off w sekcji *Ulepszenia Audio & Video* w ustawieniach aplikacji.
+  - Zaawansowany filtr neuronowy Mozilla/Xiph RNNoise eliminujący dźwięki uderzeń w klawiaturę, szum wentylatorów chłodzenia PC i hałas z otoczenia w czasie rzeczywistym (48 kHz).
+  - Przełącznik on/off w sekcji *Ulepszenia Audio & Video* w ustawieniach aplikacji.
 - **Pływające okno Picture-in-Picture (PiP / Mini-Player)**:
-  - Zawsze na wierzchu (Always-on-Top) miniaturowy odtwarzacz wideo podczas minimalizacji Talka.
-  - Płynny obraz aktywnego mówcy w 60 fps, licznik czasu połączenia oraz szybkie przyciski wyciszenia mikrofonu 🎙️, kamery 📹, przywrócenia okna 🗖 i zakończenia rozmowy ❌.
+  - Zawsze na wierzchu (Always-on-Top) miniaturowy odtwarzacz wideo podczas minimalizacji Talka lub pracy w innych oknach.
+  - Płynny podgląd aktywnego mówcy, licznik czasu połączenia oraz szybkie przyciski wyciszenia mikrofonu 🎙️, kamery 📹, przywrócenia okna 🗖 i zakończenia rozmowy ❌.
+- **Dźwiękowe potwierdzenia mikrofonu (Audio Chimes)**:
+  - Dyskretne, syntetyzowane akordy dźwiękowe potwierdzające wyciszenie oraz ponowne włączenie mikrofonu, zapobiegające mówieniu przy wyłączonym mikrofonie.
+
+### ⚡ Narzędzia Produktywności i Nowe Komendy
+- **Szybki przełącznik / Paleta komend (`Ctrl + K`)**:
+  - Błyskawiczna nawigacja po pokojach rozmów i skrótach bez użycia myszki.
+- **Generator podsumowań i notatek ze spotkań (`/summary`)**:
+  - Błyskawiczny szablon ustaleń, agendy i zadań (Action Items) z eksportem do formatu Markdown.
+- **Interaktywne ankiety na czacie (`/poll`)**:
+  - Narzędzie do błyskawicznego zbierania głosów uczestników spotkania bezpośrednio w oknie czatu.
+- **Wbudowany rejestrator klipów ekranu i rozmów (`/record`)**:
+  - Jednoklikowe nagrywanie fragmentu ekranu lub rozmowy do pliku WebM/MP4.
 
 ### 🔔 Powiadomienia, Tacka i Interfejs
 - **Licznik nieprzeczytanych wiadomości w zasobniku (PR #1605)**:
@@ -48,7 +60,7 @@ Wszystkie skompilowane paczki instalacyjne dla najnowszego wydania **v2.4.1** s�
 - **Niestandardowe style Custom CSS (PR #1745)**:
   - Wsparcie dla pliku `custom.css` w ustawieniach aplikacji, pozwalające na pełną personalizację wyglądu czatu.
 
-### 🛡️ Bezpieczeństwo, Połączenia i Udostępnianie Ekranu
+### 🔒 Bezpieczeństwo, Połączenia i Udostępnianie Ekranu
 - **Eliminacja efektu lustra przy udostępnianiu (PR #1826)**:
   - Natywne wykluczanie okna Talk z nagrywania całego pulpitu (`BrowserWindow.setContentProtection(true)` / Windows `WDA_EXCLUDEFROMCAPTURE`), zapobiegające nieskończonej pętli odbić w transmitowanym obrazie.
 - **Żółta ramka DWM transmitowanego okna/ekranu (PR #1974)**:
@@ -57,6 +69,8 @@ Wszystkie skompilowane paczki instalacyjne dla najnowszego wydania **v2.4.1** s�
   - Ostrzeżenie z pytaniem czy opuścić rozmowę, czy kontynuować w tle przy kliknięciu [X] w trakcie trwającego połączenia.
 - **Automatyczny status „W trakcie rozmowy” (Issue #1768)**:
   - Automatyczna zmiana statusu użytkownika na `Zajęty / W trakcie rozmowy` podczas aktywnego połączenia i przywracanie stanu po rozłączeniu.
+- **Poprawka błędu uruchamiania i widoczności okna**:
+  - Okno główne pojawia się natychmiast po uruchomieniu aplikacji ze skrótu lub autostartu, z prawidłową obsługą wyciągania okna na wierzch przy próbie ponownego uruchomienia.
 - **Poprawka błędu audio NotReadableError na Windows (Issue #2002)**:
   - Wyłączenie flagi `AudioServiceSandbox`, eliminujące błąd zacinania mikrofonu w Windows 10/11.
 - **Optymalizacja 4K / HiDPI / RDP (Issue #1787)**:
@@ -68,37 +82,37 @@ Wszystkie skompilowane paczki instalacyjne dla najnowszego wydania **v2.4.1** s�
 - **Akcja „Dołącz przez link” (PR #1541)**:
   - Opcja wklejenia linku do pokoju rozmowy z poziomu menu głównego aplikacji.
 
-### 🔄 Dedykowany Auto-Updater
-Klient posiada wbudowaną obsługę automatycznych aktualizacji połączoną bezpośrednio z repozytorium wydań:
-`https://api.github.com/repos/Sairento-92/talk-desktop/releases`
-
 ---
 
-## 🛠️ Budowanie ze Źródeł (Development)
+## 🛠️ Budowanie ze Źródeł
 
-Wymagania: Node.js 20+ lub 24+, npm.
+### Wymagania wstępne:
+- Node.js LTS (wersja 20 lub 22)
+- npm 10+
+- Inno Setup 6 (do budowania instalatora Windows `.exe`)
 
 ```bash
+# Klonowanie repozytorium
+git clone https://github.com/Sairento-92/talk-desktop.git
+cd talk-desktop
+
 # Instalacja zależności
-npm ci
+npm install
 
 # Uruchomienie w trybie deweloperskim
-npm run dev
+npm start
 
-# Sprawdzenie typów TypeScript
-npm run ts:check
+# Budowanie paczki Windows x64
+npm run build:windows:x64
 
-# Kompilacja paczek produkcyjnych
-npm run build          # Bieżąca platforma
-npm run build:windows  # Windows x64
-npm run build:linux    # Linux x64
-npm run build:mac      # macOS Universal
+# Kompilacja instalatora Windows Inno Setup
+& "C:\Users\<user>\AppData\Local\Programs\Inno Setup 6\iscc.exe" installer.iss
 ```
 
 ---
 
-## 👤 Autor i Społeczność
-- **Autor forka:** Sairento ([@Sairento-92](https://github.com/Sairento-92))
-- **Email:** `jakubbojarski92@gmail.com`
-- **Studio:** Huriko Cloud (`cloud.huriko.com`)
-- **Licencja:** AGPL-3.0
+## 📄 Licencja
+
+Aplikacja jest udostępniana na warunkach wolnej licencji **GNU Affero General Public License v3.0 (AGPLv3)**.
+Oryginalny kod: © Nextcloud GmbH and Nextcloud contributors.
+Modyfikacje i usprawnienia forka: © Sairento.
