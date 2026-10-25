@@ -12,6 +12,7 @@ import { useDevMode } from '../../../shared/useDevMode.ts'
 import { useAppConfigStore } from '../Settings/appConfig.store.ts'
 import { useHeartbeat } from '../UserStatus/useHeartbeat.ts'
 import { useUserStatusStore } from '../UserStatus/userStatus.store.ts'
+import hurikoLogo from '../../../../img/huriko-logo.png'
 
 useUserStatusStore()
 useHeartbeat()
@@ -35,7 +36,8 @@ const { isDevMode } = useDevMode()
 				</div>
 
 				<div class="title-bar__fork-badge">
-					Fork by Sairento
+					<img :src="hurikoLogo" class="title-bar__huriko-logo" alt="Huriko" />
+					<span>Fork by Sairento</span>
 				</div>
 
 				<div v-if="channel !== 'stable'" class="title-bar__channel">
@@ -101,6 +103,9 @@ const { isDevMode } = useDevMode()
 }
 
 .title-bar__fork-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
 	font-size: 11px;
 	font-weight: 700;
 	letter-spacing: 0.5px;
@@ -108,10 +113,17 @@ const { isDevMode } = useDevMode()
 	color: #ffffff;
 	background: rgba(0, 130, 201, 0.45);
 	border: 1px solid rgba(255, 255, 255, 0.35);
-	padding: 2px 9px;
+	padding: 2px 9px 2px 6px;
 	border-radius: 12px;
 	margin-inline-end: calc(var(--default-grid-baseline) * 2);
 	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.title-bar__huriko-logo {
+	height: 14px;
+	width: auto;
+	vertical-align: middle;
+	filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
 }
 
 .title-bar__channel {
