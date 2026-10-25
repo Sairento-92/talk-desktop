@@ -63,13 +63,22 @@ async function getLatestRelease(): Promise<{ latest?: ReleaseInfo, stable?: Rele
 		})
 
 	try {
-		// Ref: https://docs.github.com/en/rest/releases/releases?apiVersion=2022-11-28
-		const response = await fetch('https://api.github.com/repos/nextcloud-releases/talk-desktop/releases', {
+		// Check for fork releases from Sairento-92 first, fall back to upstream
+		let response = await fetch('https://api.github.com/repos/Sairento-92/talk-desktop/releases', {
 			headers: {
 				Accept: 'application/vnd.github+json',
 				'X-GitHub-Api-Version': '2022-11-28',
 			},
 		})
+
+		if (!response.ok) {
+			response = await fetch('https://api.github.com/repos/nextcloud-releases/talk-desktop/releases', {
+				headers: {
+					Accept: 'application/vnd.github+json',
+					'X-GitHub-Api-Version': '2022-11-28',
+				},
+			})
+		}
 
 		if (!response.ok) {
 			return {
