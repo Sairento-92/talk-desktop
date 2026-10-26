@@ -102,27 +102,49 @@ export function getWindowUrl(window: typeof windows[number]) {
 }
 
 /**
- * Check weather a link is an internal application link
+ * Check whether a link is an internal application link or browser pseudo-protocol
  *
  * @param url - URL
  */
 export function isInternalUrl(url: string | URL) {
-	if (typeof url === 'string') {
-		url = new URL(url)
+	try {
+		const parsed = typeof url === 'string' ? new URL(url) : url
+
+		// Internal browser / electron pseudo-protocols
+		if (['about:', 'javascript:', 'data:', 'blob:'].includes(parsed.protocol)) {
+			return true
+		}
+
+		const internalOrigin = appData.serverUrl ? new URL(appData.serverUrl).origin : APP_ORIGIN
+
+		return parsed.origin === internalOrigin && parsed.pathname.startsWith('/talk_desktop__')
+	} catch {
+		return true
 	}
-
-	const internalOrigin = appData.serverUrl ? new URL(appData.serverUrl).origin : APP_ORIGIN
-
-	return url.origin === internalOrigin && url.pathname.startsWith('/talk_desktop__')
 }
 
 /**
- * Check whether a link is not an internal application link
+ * Check whether a link is a safe external web URL (http / https) to open in OS browser
  *
  * @param url - URL
  */
 export function isExternalUrl(url: string | URL) {
-	return !isInternalUrl(url)
+	try {
+		const parsed = typeof url === 'string' ? new URL(url) : url
+
+		// Never treat pseudo-protocols (like about:blank) as external URLs to open with OS shell
+		if (['about:', 'javascript:', 'data:', 'blob:'].includes(parsed.protocol)) {
+			return false
+		}
+
+		if (!['http:', 'https:'].includes(parsed.protocol)) {
+			return false
+		}
+
+		return !isInternalUrl(parsed)
+	} catch {
+		return false
+	}
 }
 
 /**

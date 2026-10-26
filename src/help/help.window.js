@@ -9,12 +9,21 @@ const { applyExternalLinkHandler } = require('../app/externalLinkHandlers.ts')
 const { getScaledWindowSize, applyZoom, buildTitle, getWindowUrl, onReadyToShow } = require('../app/utils.ts')
 const { getBrowserWindowIcon } = require('../shared/icons.utils.js')
 
+let helpWindowInstance = null
+
 /**
  *
  * @param {import('electron').BrowserWindow} parentWindow - main window (parent)
  * @return {import('electron').BrowserWindow}
  */
 function createHelpWindow(parentWindow) {
+	if (helpWindowInstance && !helpWindowInstance.isDestroyed()) {
+		if (helpWindowInstance.isMinimized()) helpWindowInstance.restore()
+		helpWindowInstance.show()
+		helpWindowInstance.focus()
+		return helpWindowInstance
+	}
+
 	const window = new BrowserWindow({
 		title: buildTitle(),
 		...getScaledWindowSize({
@@ -43,8 +52,13 @@ function createHelpWindow(parentWindow) {
 	applyContextMenu(window)
 	applyZoom(window)
 
+	window.on('closed', () => {
+		helpWindowInstance = null
+	})
+
 	onReadyToShow(window, () => window.show())
 
+	helpWindowInstance = window
 	return window
 }
 

@@ -61,6 +61,14 @@ export function applyExternalLinkHandler(browserWindow: BrowserWindow, browserWi
  * @param browserWindowOptions - Options for new BrowserWindow, usually based on parent options
  */
 function windowOpenExternalLinkHandler(details: HandlerDetails, browserWindowOptions: BrowserWindowConstructorOptions = {}): WindowOpenHandlerResponse {
+	// Disregard blank or pseudo URLs from launching external OS browser
+	if (!details.url || details.url.startsWith('about:') || details.url.startsWith('javascript:')) {
+		return {
+			action: 'allow',
+			overrideBrowserWindowOptions: browserWindowOptions,
+		}
+	}
+
 	// Open external links in the default web-browser instead of a new app window
 	if (isExternalUrl(details.url)) {
 		shell.openExternal(details.url)
@@ -81,6 +89,11 @@ function windowOpenExternalLinkHandler(details: HandlerDetails, browserWindowOpt
  */
 async function willNavigateExternalLinkHandler(event: Event<WebContentsWillNavigateEventParams>) {
 	const { url, initiator: webFrameMain } = event
+
+	// Internal or pseudo-protocol navigation (e.g. about:blank) - do not intercept or pass to OS
+	if (!url || url.startsWith('about:') || url.startsWith('javascript:')) {
+		return
+	}
 
 	// Internal navigation - do nothing
 	if (!isExternalUrl(url)) {
