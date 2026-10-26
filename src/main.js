@@ -363,8 +363,9 @@ app.whenReady().then(async () => {
 		setupReleaseNotificationScheduler(24 * 60)
 	}
 
-	// Open in the background ONLY if it is explicitly passed as a CLI flag (e.g. from autostart --background)
-	const openInBackground = process.argv.includes('--background')
+	// Open in the background if CLI flag is passed (--background, --minimized) or startMinimized is configured
+	const startMinimized = getAppConfig('startMinimized') || false
+	const openInBackground = process.argv.includes('--background') || process.argv.includes('--minimized') || startMinimized
 
 	try {
 		await installVueDevtools()
@@ -432,7 +433,11 @@ app.whenReady().then(async () => {
 
 	mainWindow = createWelcomeWindow()
 	createMainWindow = createWelcomeWindow
-	onReadyToShow(mainWindow, () => mainWindow.show())
+	onReadyToShow(mainWindow, () => {
+		if (!openInBackground) {
+			mainWindow.show()
+		}
+	})
 
 	ipcMain.once('appData:receive', async (event, newAppData) => {
 		appData.fromJSON(newAppData)
@@ -452,10 +457,6 @@ app.whenReady().then(async () => {
 			mainWindow = createAuthenticationWindow()
 			createMainWindow = createAuthenticationWindow
 		}
-
-		mainWindow.show()
-		mainWindow.focus()
-		try { welcomeWindow.close() } catch (e) {}
 
 		onReadyToShow(mainWindow, () => {
 			if (!openInBackground) {

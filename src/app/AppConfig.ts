@@ -174,6 +174,18 @@ export type AppConfig = {
 	 * Audible chimes on microphone mute and unmute
 	 */
 	enableAudioCues: boolean
+	/**
+	 * Whether to start the application directly minimized to system tray without showing the window
+	 */
+	startMinimized: boolean
+	/**
+	 * Custom sound file path for chat notifications (.mp3, .wav, .ogg)
+	 */
+	customChatSound: string | null
+	/**
+	 * Custom sound file path for incoming call ringtone (.mp3, .wav, .ogg)
+	 */
+	customCallSound: string | null
 }
 
 export type AppConfigKey = keyof AppConfig
@@ -204,6 +216,9 @@ const defaultAppConfig: AppConfig = {
 	enableRnnoise: true,
 	enablePip: true,
 	enableAudioCues: true,
+	startMinimized: false,
+	customChatSound: null,
+	customCallSound: null,
 }
 
 /**

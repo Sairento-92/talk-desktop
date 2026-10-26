@@ -33,6 +33,7 @@ const isTestNotificationApp = (notificationApp) => ['admin_notification_talk', '
 export function createNotificationStore() {
 	const userStatusStore = useUserStatusStore()
 	const playSoundChat = useAppConfigValue('playSoundChat')
+	const customChatSound = useAppConfigValue('customChatSound')
 	const shouldPlaySoundChat = computed(() => playSoundChat.value === 'respect-dnd'
 		? userStatusStore.userStatus?.status !== 'dnd'
 		: playSoundChat.value === 'always')
@@ -145,7 +146,7 @@ export function createNotificationStore() {
 		}
 
 		const sound = new Howl({
-			src: [generateFilePath('notifications', 'img', 'notification.ogg')],
+			src: [customChatSound.value || generateFilePath('notifications', 'img', 'notification.ogg')],
 			volume: 0.5,
 		})
 		sound.play()

@@ -27,8 +27,9 @@ export function playRingtone() {
 		return () => {}
 	}
 
+	const customCallSound = getAppConfigValue('customCallSound')
 	const howlPayload: HowlOptions = {
-		src: [generateFilePath('notifications', 'img', 'talk.ogg')],
+		src: [customCallSound || generateFilePath('notifications', 'img', 'talk.ogg')],
 		html5: true, // to access HTMLAudioElement property 'sinkId'
 		volume: 0.5,
 		loop: true,
