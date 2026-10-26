@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-const { app, nativeTheme } = require('electron')
+const { app, nativeTheme, nativeImage } = require('electron')
 const path = require('node:path')
 const { getAppConfig } = require('../app/AppConfig.ts')
 
@@ -16,6 +16,7 @@ const icons = {
 	// Executable's icon is used by default
 	window: {
 		linux: require('../../img/icons/icon.png'),
+		win32: require('../../img/icons/icon.ico'),
 	},
 
 	tray: {
@@ -74,6 +75,20 @@ function getBrowserWindowIcon() {
 	if (isLinux) {
 		// https://www.electronforge.io/guides/create-and-add-icons#linux
 		return path.join(app.getAppPath(), '.webpack/main', icons.window.linux)
+	}
+
+	if (platform === 'win32') {
+		const iconPath = path.resolve(__dirname, icons.window.win32)
+		const img = nativeImage.createFromPath(iconPath)
+		if (!img.isEmpty()) {
+			return img
+		}
+		const pngPath = path.resolve(__dirname, icons.window.linux)
+		const pngImg = nativeImage.createFromPath(pngPath)
+		if (!pngImg.isEmpty()) {
+			return pngImg
+		}
+		return iconPath
 	}
 
 	return undefined

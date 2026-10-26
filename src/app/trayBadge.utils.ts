@@ -31,8 +31,8 @@ export async function createTrayIconWithBadge(baseIconPath: string, count: numbe
 	// Read and cache the base icon as data URL
 	if (cachedBaseIconPath !== baseIconPath || !cachedBaseIconDataUrl) {
 		cachedBaseIconPath = baseIconPath
-		const buffer = fs.readFileSync(baseIconPath)
-		cachedBaseIconDataUrl = `data:image/png;base64,${buffer.toString('base64')}`
+		const img = nativeImage.createFromPath(baseIconPath)
+		cachedBaseIconDataUrl = img.toDataURL()
 	}
 
 	// Create invisible window for rendering

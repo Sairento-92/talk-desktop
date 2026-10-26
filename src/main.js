@@ -66,13 +66,12 @@ const argv = mri(process.argv.slice(app.isPackaged ? 1 : 2))
 const APP_NAME = process.env.NODE_ENV !== 'development' ? path.parse(app.getPath('exe')).name : 'Nextcloud Talk (dev)'
 app.setName(APP_NAME)
 app.setPath('userData', path.join(app.getPath('appData'), app.getName()))
-if (isWindows && process.env.NODE_ENV === 'production') {
+if (isWindows) {
 	if (isSquirrel) {
 		// Squirrel.Windows sets the AppUserModelId in the following way
 		app.setAppUserModelId(`com.squirrel.${BUILD_CONFIG.applicationNameSanitized}.${BUILD_CONFIG.applicationNameSanitized}`)
 	} else {
-		// MSI installer - normal AppID
-		app.setAppUserModelId(BUILD_CONFIG.winAppId)
+		app.setAppUserModelId(BUILD_CONFIG.winAppId || 'com.nextcloud.talk')
 	}
 }
 

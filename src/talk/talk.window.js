@@ -59,6 +59,15 @@ function createTalkWindow() {
 		show: true,
 	})
 
+	const winIcon = getBrowserWindowIcon()
+	if (winIcon) {
+		try {
+			window.setIcon(winIcon)
+		} catch (e) {
+			console.warn('Failed to set window icon:', e)
+		}
+	}
+
 	// TODO: return it on release
 	/*
 	if (process.env.NODE_ENV === 'production') {

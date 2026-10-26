@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-const { app, Tray, Menu, nativeTheme, dialog } = require('electron')
+const { app, Tray, Menu, nativeTheme, dialog, nativeImage } = require('electron')
 const { getTrayIconPath } = require('../shared/icons.utils.js')
 const { createTrayIconWithBadge, clearTrayIconCache } = require('./trayBadge.utils.ts')
 
@@ -23,6 +23,15 @@ app.on('before-quit', () => {
 })
 
 /**
+ * Get native image for tray icon (properly loaded from asar or disk)
+ */
+function getTrayNativeImage() {
+	const iconPath = getTrayIconPath()
+	const img = nativeImage.createFromPath(iconPath)
+	return img.isEmpty() ? iconPath : img
+}
+
+/**
  * Update the tray icon with the current badge count
  */
 async function refreshTrayIcon() {
@@ -31,10 +40,10 @@ async function refreshTrayIcon() {
 	}
 
 	try {
-		const iconPath = getTrayIconPath()
 		if (currentBadgeCount <= 0) {
-			trayInstance.setImage(iconPath)
+			trayInstance.setImage(getTrayNativeImage())
 		} else {
+			const iconPath = getTrayIconPath()
 			const icon = await createTrayIconWithBadge(iconPath, currentBadgeCount)
 			trayInstance.setImage(icon)
 		}
@@ -60,8 +69,8 @@ async function updateTrayBadge(count) {
  * @return {import('electron').Tray} Tray instance
  */
 function setupTray(browserWindow) {
-	const iconPath = getTrayIconPath()
-	trayInstance = new Tray(iconPath)
+	const iconImage = getTrayNativeImage()
+	trayInstance = new Tray(iconImage)
 	trayInstance.setToolTip(app.name)
 	trayInstance.setContextMenu(Menu.buildFromTemplate([
 		{

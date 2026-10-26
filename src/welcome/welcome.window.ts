@@ -42,6 +42,15 @@ export function createWelcomeWindow() {
 
 	applyZoom(window)
 
+	const winIcon = getBrowserWindowIcon()
+	if (winIcon) {
+		try {
+			window.setIcon(winIcon)
+		} catch (e) {
+			console.warn('Failed to set window icon:', e)
+		}
+	}
+
 	window.loadURL(getWindowUrl('welcome'))
 
 	return window
