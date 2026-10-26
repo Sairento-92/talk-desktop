@@ -129,6 +129,18 @@ function registerShortcuts() {
 		} else {
 			console.log(`Global Toggle Mute registered with shortcut: ${shortcut}`)
 		}
+
+		// Issue #1911: Global shortcut to toggle Talk Desktop window visibility
+		globalShortcut.register('Control+Alt+T', () => {
+			if (!activeTalkWindow || activeTalkWindow.isDestroyed()) return
+			if (activeTalkWindow.isVisible() && !activeTalkWindow.isMinimized()) {
+				activeTalkWindow.hide()
+			} else {
+				if (activeTalkWindow.isMinimized()) activeTalkWindow.restore()
+				activeTalkWindow.show()
+				activeTalkWindow.focus()
+			}
+		})
 	} catch (err) {
 		console.error(`Error registering global shortcut ${shortcut}:`, err)
 	}

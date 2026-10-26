@@ -8,6 +8,7 @@ import AppsMenu from './components/AppsMenu.vue'
 import DevMenu from './components/DevMenu.vue'
 import MainMenu from './components/MainMenu.vue'
 import UserMenu from './components/UserMenu.vue'
+import ConversationTabs from './components/ConversationTabs.vue'
 import { BUILD_CONFIG } from '../../../shared/build.config.ts'
 import { useDevMode } from '../../../shared/useDevMode.ts'
 import { useAppConfigStore } from '../Settings/appConfig.store.ts'
@@ -45,6 +46,8 @@ const { isDevMode } = useDevMode()
 					{{ channel }}
 				</div>
 			</template>
+
+			<ConversationTabs />
 
 			<div class="spacer" />
 
